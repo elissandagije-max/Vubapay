@@ -51,15 +51,14 @@
         .input-group input { width: 100%; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; }
         .qr-container { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; margin: 25px 0; }
         .qr-box { background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; text-align: center; }
-        .qr-box img { width: 180px; height: 180px; }
+        .qr-box img { width: 200px; height: auto; }
         .ussd-options { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: left; }
         .ussd-option { background: white; padding: 12px; margin: 10px 0; border-radius: 8px; font-family: monospace; font-size: 0.9rem; border: 1px solid #e2e8f0; }
         .ussd-option i { color: #006C3C; margin-right: 10px; }
-        .btn-primary { background: #006C3C; color: white; border: none; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
-        .btn-primary:hover { background: #008050; }
-        .btn-warning { background: #FCC400; color: #006C3C; border: none; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
-        .btn-warning:hover { background: #e6b300; }
-        .btn-secondary { background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        .btn-primary { background: #006C3C; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.2s; }
+        .btn-primary:hover { background: #008050; transform: translateY(-2px); }
+        .btn-warning { background: #FCC400; color: #006C3C; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.2s; }
+        .btn-warning:hover { background: #e6b300; transform: translateY(-2px); }
         .transactions-section { background: white; border-radius: 16px; padding: 25px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
         .transactions-table { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
@@ -75,10 +74,6 @@
         .social-icons a { width: 35px; height: 35px; background: rgba(255,255,255,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .social-icons a:hover { background: #FCC400; }
         .footer-bottom { text-align: center; padding-top: 25px; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.7rem; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; border-radius: 16px; padding: 25px; width: 90%; max-width: 400px; }
-        .modal-content h3 { margin-bottom: 15px; color: #006C3C; text-align: center; }
-        .modal-content select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
         .alert { position: fixed; top: 80px; right: 20px; padding: 12px 20px; border-radius: 10px; z-index: 3000; display: none; }
         .alert-success { background: #d1fae5; color: #065f46; }
         .alert-error { background: #fee2e2; color: #991b1b; }
@@ -90,7 +85,7 @@
 <body>
 
 <header class="header">
-    <div class="logo"><div class="logo-icon"><i class="fas fa-qrcode"></i></div><div class="logo-text">Vuba<span>Pay</span></div><div class="chessx-badge">by ChessX</div></div>
+    <div class="logo"><div class="logo-icon"><i class="fas fa-qrcode"></i></div><div class="logo-text">Vuba<span>Pay</span></div><div class="chessx-badge">by KoraVuba</div></div>
     <div class="header-right">
         <div class="balance-badge"><i class="fas fa-wallet"></i><span id="walletBalance">0 RWF</span></div>
         <div class="language-selector">
@@ -108,36 +103,43 @@
 
 <div class="container">
     <div class="hero-banner"><h1>VubaPay</h1><div class="slogan"><i class="fas fa-qrcode"></i> <span id="sloganText">JUST SCAN & PAY</span> <i class="fas fa-bolt"></i></div></div>
-    <div class="welcome-banner"><div class="welcome-text"><h2><span id="welcomeText">Welcome back</span>, <span id="riderName">Provider</span>!</h2><p id="welcomeSubtext">Manage your payment options and QR code</p></div><div class="date-time" id="currentDateTime"></div></div>
+    <div class="welcome-banner"><div class="welcome-text"><h2><span id="welcomeText">Welcome back</span>, <span id="riderName">Provider</span>!</h2><p id="welcomeSubtext">Enter your payment details to generate QR code instantly</p></div><div class="date-time" id="currentDateTime"></div></div>
     <div class="stats-grid">
         <div class="stat-card"><div class="stat-info"><h3 id="statEarningsTitle">Total Earnings</h3><div class="stat-value" id="totalEarnings">0 RWF</div></div><div class="stat-icon"><i class="fas fa-chart-line"></i></div></div>
         <div class="stat-card"><div class="stat-info"><h3 id="statTransactionsTitle">Total Transactions</h3><div class="stat-value" id="totalRides">0</div></div><div class="stat-icon"><i class="fas fa-exchange-alt"></i></div></div>
-        <div class="stat-card"><div class="stat-info"><h3 id="statQRTitle">QR Status</h3><div class="stat-value" id="qrStatus">Inactive</div></div><div class="stat-icon"><i class="fas fa-qrcode"></i></div></div>
+        <div class="stat-card"><div class="stat-info"><h3 id="statQRTitle">QR Status</h3><div class="stat-value" id="qrStatus">Ready</div></div><div class="stat-icon"><i class="fas fa-qrcode"></i></div></div>
     </div>
-    <div class="qr-section"><div class="section-title"><i class="fas fa-qrcode"></i><span id="qrSectionTitle">Your QR Code</span></div>
+    <div class="qr-section"><div class="section-title"><i class="fas fa-qrcode"></i><span id="qrSectionTitle">Generate Your QR Code</span></div>
         <div class="payment-type-selector"><div class="payment-type-btn" data-type="momocode" onclick="selectPaymentType('momocode')"><i class="fas fa-code"></i><strong id="momocodeTitle">MoMo Code</strong><small>*182*8*1*XXXXXX#</small></div>
         <div class="payment-type-btn" data-type="momo_number" onclick="selectPaymentType('momo_number')"><i class="fas fa-phone-alt"></i><strong id="momoNumberTitle">Mobile Money Number</strong><small>*182*1*1*XXXXXX#</small></div></div>
-        <div id="momocodeFields" class="input-group" style="display:none;"><label><i class="fas fa-qrcode"></i> <span id="enterCodeLabel">Enter your 6-digit Payment Code</span></label><input type="number" id="paymentCode" placeholder="Enter 6-digit code" min="100000" max="999999"><small style="color:#666;" id="codeHint">This will be used as *182*8*1*YOURCODE#</small></div>
-        <div id="momoNumberFields" class="input-group" style="display:none;"><label><i class="fas fa-mobile-alt"></i> <span id="enterNumberLabel">Enter your Mobile Money Number</span></label><input type="tel" id="mobileNumber" placeholder="Enter 10-digit number"><small style="color:#666;" id="numberHint">This will be used as *182*1*1*YOURNUMBER#</small></div>
-        <div class="qr-container"><div class="qr-box"><div id="qrDisplay"><i class="fas fa-qrcode" style="font-size:120px;color:#006C3C;"></i></div><button class="btn-warning" onclick="showPaymentModal()" style="margin-top:15px;"><i class="fas fa-credit-card"></i> <span id="payGenerateBtn">Pay 200 RWF & Generate QR</span></button><button class="btn-primary" onclick="downloadQRCode()" style="margin-top:10px;" id="downloadBtn" disabled><i class="fas fa-download"></i> <span id="downloadBtnText">Download QR Code</span></button></div>
-        <div class="ussd-options"><h4><i class="fas fa-phone-alt"></i> <span id="customerOptionsTitle">Customer Payment Options:</span></h4><div class="ussd-option" id="ussdOption1"><i class="fas fa-code"></i> <strong id="option1Title">Option 1 (MoMo Code):</strong> <span id="ussdCodeDisplay">Not configured</span></div><div class="ussd-option" id="ussdOption2"><i class="fas fa-mobile-alt"></i> <strong id="option2Title">Option 2 (MoMo Number):</strong> <span id="ussdNumberDisplay">Not configured</span></div><p style="font-size:0.75rem;color:#64748b;margin-top:10px;"><i class="fas fa-info-circle"></i> <span id="customerInfoText">Customers can use either method to pay you instantly</span></p></div></div>
+        <div id="momocodeFields" class="input-group" style="display:none;"><label><i class="fas fa-qrcode"></i> <span id="enterCodeLabel">Enter your 6-digit Payment Code</span></label><input type="number" id="paymentCode" placeholder="Enter 6-digit code (e.g., 112299)" min="100000" max="999999"><small style="color:#666;" id="codeHint">This will be used as *182*8*1*YOURCODE#</small></div>
+        <div id="momoNumberFields" class="input-group" style="display:none;"><label><i class="fas fa-mobile-alt"></i> <span id="enterNumberLabel">Enter your Mobile Money Number</span></label><input type="tel" id="mobileNumber" placeholder="Enter 10-digit number (e.g., 0788123456)"><small style="color:#666;" id="numberHint">This will be used as *182*1*1*YOURNUMBER#</small></div>
+        <div class="qr-container"><div class="qr-box">
+            <div id="qrDisplay">
+                <i class="fas fa-qrcode" style="font-size:100px;color:#006C3C;"></i>
+            </div>
+            <button class="btn-primary" onclick="generateAndSaveQR()" style="margin-top:15px;"><i class="fas fa-sync-alt"></i> <span id="generateBtnText">Generate QR Code</span></button>
+            <button class="btn-warning" onclick="downloadQRCode()" style="margin-top:10px;" id="downloadBtn" disabled><i class="fas fa-download"></i> <span id="downloadBtnText">Download QR Code</span></button>
+        </div>
+        <div class="ussd-options"><h4><i class="fas fa-phone-alt"></i> <span id="customerOptionsTitle">Your Customer Payment Options:</span></h4><div class="ussd-option" id="ussdOption1"><i class="fas fa-code"></i> <strong id="option1Title">Option 1 (MoMo Code):</strong> <span id="ussdCodeDisplay">Not configured</span></div><div class="ussd-option" id="ussdOption2"><i class="fas fa-mobile-alt"></i> <strong id="option2Title">Option 2 (MoMo Number):</strong> <span id="ussdNumberDisplay">Not configured</span></div><p style="font-size:0.75rem;color:#64748b;margin-top:10px;"><i class="fas fa-info-circle"></i> <span id="customerInfoText">Customers can use either method to pay you instantly</span></p></div></div>
     </div>
     <div class="transactions-section"><div class="section-title"><i class="fas fa-history"></i><span id="recentTitle">Recent Transactions</span></div><div class="transactions-table"><table><thead><tr><th id="thId">Transaction ID</th><th id="thAmount">Amount</th><th id="thMethod">Method</th><th id="thStatus">Status</th><th id="thDate">Date</th></tr></thead><tbody id="transactionsList"><tr><td colspan="5" style="text-align:center;" id="noTransactions">No transactions yet</td></tr></tbody></table></div></div>
 </div>
 
-<footer class="footer"><div class="footer-content"><div class="footer-section"><h4>VubaPay</h4><p id="footerDesc">Smart Payment System<br>Digitalize Your Business</p><div class="social-icons"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div><div class="footer-section"><h4 id="quickLinksTitle">Quick Links</h4><p><a href="#" onclick="location.reload()" id="dashboardLink">Dashboard</a></p><p><a href="#" id="transactionsLink">Transactions</a></p><p><a href="#" id="downloadAppLink">Download App</a></p></div><div class="footer-section"><h4 id="contactTitle">Contact</h4><p><i class="fas fa-phone"></i> +250 788 123 456</p><p><i class="fas fa-envelope"></i> hello@vubapay.rw</p></div></div><div class="footer-bottom"><p id="copyright">&copy; 2024 VubaPay by ChessX Technologies | Scan, Pay, Done</p></div></footer>
+<footer class="footer"><div class="footer-content"><div class="footer-section"><h4>VubaPay</h4><p id="footerDesc">Smart Payment System<br>Digitalize Your Business</p><div class="social-icons"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div><div class="footer-section"><h4 id="quickLinksTitle">Quick Links</h4><p><a href="#" onclick="location.reload()" id="dashboardLink">Dashboard</a></p><p><a href="#" id="transactionsLink">Transactions</a></p><p><a href="#" id="downloadAppLink">Download App</a></p></div><div class="footer-section"><h4 id="contactTitle">Contact</h4><p><i class="fas fa-phone"></i> +250 788 123 456</p><p><i class="fas fa-envelope"></i> hello@vubapay.rw</p></div></div><div class="footer-bottom"><p id="copyright">&copy; 2026 VubaPay by KoraVuba Technologies | Scan, Pay, Done</p></div></footer>
 
-<div id="paymentModal" class="modal"><div class="modal-content"><h3 id="modalTitle">Generate QR Code</h3><p id="modalDesc">Pay 200 RWF to generate your QR Code</p><div class="input-group"><label id="paymentMethodLabel">Select Payment Method:</label><select id="paymentMethod"><option value="MTN">MTN Mobile Money</option><option value="AIRTEL">Airtel Money</option></select></div><button class="btn-primary" onclick="processPayment()" style="width:100%;" id="modalPayBtn">Pay 200 RWF & Generate</button><button onclick="closePaymentModal()" class="btn-secondary" style="width:100%;" id="modalCancelBtn">Cancel</button></div></div>
 <div id="alert" class="alert"></div>
 
 <script>
     // ============ GLOBAL LANGUAGE PERSISTENCE ============
     let currentLang = 'en';
+    let currentQRCodeDataURL = null;
+    
     const translations = {
-        en: { logout: "Logout", slogan: "JUST SCAN & PAY", welcome: "Welcome back", welcomeSub: "Manage your payment options and QR code", earnings: "Total Earnings", transactions: "Total Transactions", qrStatus: "QR Status", qrSection: "Your QR Code", momocode: "MoMo Code", momoNumber: "Mobile Money Number", enterCode: "Enter your 6-digit Payment Code", enterNumber: "Enter your Mobile Money Number", codeHint: "This will be used as *182*8*1*YOURCODE#", numberHint: "This will be used as *182*1*1*YOURNUMBER#", payGenerate: "Pay 200 RWF & Generate QR", download: "Download QR Code", customerOptions: "Customer Payment Options:", option1: "Option 1 (MoMo Code):", option2: "Option 2 (MoMo Number):", customerInfo: "Customers can use either method to pay you instantly", recent: "Recent Transactions", noTransactions: "No transactions yet", quickLinks: "Quick Links", dashboard: "Dashboard", transactionsLink: "Transactions", downloadApp: "Download App", contact: "Contact", copyright: "© 2024 VubaPay by ChessX Technologies | Scan, Pay, Done", modalTitle: "Generate QR Code", modalDesc: "Pay 200 RWF to generate your QR Code", paymentMethod: "Select Payment Method:", modalPay: "Pay 200 RWF & Generate", modalCancel: "Cancel" },
-        rw: { logout: "Sohora", slogan: "KANDA WISHYURE", welcome: "Murakaza neza", welcomeSub: "Komeza amahitamo yawe yishyura na QR code", earnings: "Amafaranga Yose", transactions: "Ibyishyuwe Byose", qrStatus: "Imiterere ya QR", qrSection: "QR code yawe", momocode: "Kode ya MoMo", momoNumber: "Nomero ya MoMo", enterCode: "Andika kode ya 6-digit", enterNumber: "Andika nomero ya mobile money", codeHint: "Izikoreshwa nka *182*8*1*KODE#", numberHint: "Izikoreshwa nka *182*1*1*NOMERO#", payGenerate: "Wishyure 200 RWF Ukore QR", download: "Kura QR code", customerOptions: "Uko abakiriya babishyura:", option1: "Amahitamo 1 (Kode ya MoMo):", option2: "Amahitamo 2 (Nomero ya MoMo):", customerInfo: "Abakiriya barashobora gukoresha uburyo ubwo ari bwo bwose", recent: "Ibyishyuwe vuba", noTransactions: "Nta byishyuwe", quickLinks: "Ihita", dashboard: "Urubuga", transactionsLink: "Ibyishyuwe", downloadApp: "Kura porogaramu", contact: "Twandikire", copyright: "© 2024 VubaPay na ChessX Technologies | Kanda, Wishyure, Byakozwe", modalTitle: "Kora QR Code", modalDesc: "Wishyure 200 RWF ukore QR code yawe", paymentMethod: "Hitamo uburyo bwo kwishyura:", modalPay: "Wishyure 200 RWF Ukore", modalCancel: "Hagarika" },
-        sw: { logout: "Toka", slogan: "KAGUA LIPA", welcome: "Karibu tena", welcomeSub: "Dhibiti chaguo zako za malipo na QR code", earnings: "Mapato Yote", transactions: "Miamala Yote", qrStatus: "Hali ya QR", qrSection: "QR code yako", momocode: "Msimbo wa MoMo", momoNumber: "Nambari ya MoMo", enterCode: "Weka msimbo wako wa tarakimu 6", enterNumber: "Weka nambari yako ya mobile money", codeHint: "Itatumika kama *182*8*1*MSIMBO#", numberHint: "Itatumika kama *182*1*1*NAMBARI#", payGenerate: "Lipa 200 RWF & Tengeneza QR", download: "Pakua QR code", customerOptions: "Chaguzi za Wateja:", option1: "Chaguo 1 (Msimbo wa MoMo):", option2: "Chaguo 2 (Nambari ya MoMo):", customerInfo: "Wateja wanaweza kutumia njia yoyote kukulipa", recent: "Miamala ya Hivi Karibuni", noTransactions: "Hakuna miamala", quickLinks: "Viungo", dashboard: "Dashibodi", transactionsLink: "Miamala", downloadApp: "Pakua Programu", contact: "Wasiliana", copyright: "© 2024 VubaPay na ChessX Technologies | Kagua, Lipa, Imekwisha", modalTitle: "Tengeneza QR Code", modalDesc: "Lipa 200 RWF kutengeneza QR code yako", paymentMethod: "Chagua Njia ya Malipo:", modalPay: "Lipa 200 RWF & Tengeneza", modalCancel: "Ghairi" },
-        fr: { logout: "Déconnexion", slogan: "SCANNEZ & PAYEZ", welcome: "Bon retour", welcomeSub: "Gérez vos options de paiement et QR code", earnings: "Gains Totaux", transactions: "Transactions Totales", qrStatus: "Statut QR", qrSection: "Votre QR Code", momocode: "Code MoMo", momoNumber: "Numéro Mobile Money", enterCode: "Entrez votre code à 6 chiffres", enterNumber: "Entrez votre numéro Mobile Money", codeHint: "Sera utilisé comme *182*8*1*VOTRECODE#", numberHint: "Sera utilisé comme *182*1*1*VOTRENUMERO#", payGenerate: "Payer 200 RWF & Générer QR", download: "Télécharger QR Code", customerOptions: "Options de paiement client:", option1: "Option 1 (Code MoMo):", option2: "Option 2 (Numéro MoMo):", customerInfo: "Les clients peuvent utiliser l'une ou l'autre méthode", recent: "Transactions récentes", noTransactions: "Aucune transaction", quickLinks: "Liens rapides", dashboard: "Tableau de bord", transactionsLink: "Transactions", downloadApp: "Télécharger l'application", contact: "Contact", copyright: "© 2024 VubaPay par ChessX Technologies | Scannez, Payez, Terminé", modalTitle: "Générer QR Code", modalDesc: "Payer 200 RWF pour générer votre QR Code", paymentMethod: "Sélectionnez le mode de paiement:", modalPay: "Payer 200 RWF & Générer", modalCancel: "Annuler" }
+        en: { logout: "Logout", slogan: "JUST SCAN & PAY", welcome: "Welcome back", welcomeSub: "Enter your payment details to generate QR code instantly", earnings: "Total Earnings", transactions: "Total Transactions", qrStatus: "Ready", qrSection: "Generate Your QR Code", momocode: "MoMo Code", momoNumber: "Mobile Money Number", enterCode: "Enter your 6-digit Payment Code", enterNumber: "Enter your Mobile Money Number", codeHint: "This will be used as *182*8*1*YOURCODE#", numberHint: "This will be used as *182*1*1*YOURNUMBER#", generate: "Generate QR Code", download: "Download QR Code", customerOptions: "Your Customer Payment Options:", option1: "Option 1 (MoMo Code):", option2: "Option 2 (MoMo Number):", customerInfo: "Customers can use either method to pay you instantly", recent: "Recent Transactions", noTransactions: "No transactions yet", quickLinks: "Quick Links", dashboard: "Dashboard", transactionsLink: "Transactions", downloadApp: "Download App", contact: "Contact", copyright: "© 2026 VubaPay by KoraVuba Technologies | Scan, Pay, Done" },
+        rw: { logout: "Sohora", slogan: "FOTORA WISHYURE", welcome: "Murakaza neza", welcomeSub: "Andika amakuru yawe yishyura ukore QR code", earnings: "Amafaranga Yose", transactions: "Ibyishyuwe Byose", qrStatus: "Itegurwa", qrSection: "Kora QR Code yawe", momocode: "Kode ya MoMo", momoNumber: "Nomero ya MoMo", enterCode: "Andika kode ya 6-digit", enterNumber: "Andika nomero ya mobile money", codeHint: "Izikoreshwa nka *182*8*1*KODE#", numberHint: "Izikoreshwa nka *182*1*1*NOMERO#", generate: "Kora QR Code", download: "Kura QR code", customerOptions: "Uburyo Abakiriya Bakwishyura:", option1: "Uburyo 1 (Kode ya MoMo):", option2: "Uburyo 2 (Nomero ya MoMo):", customerInfo: "Abakiriya barashobora gukoresha uburyo ubwo ari bwo bwose", recent: "Ibyishyuwe vuba", noTransactions: "Nta byishyuwe", quickLinks: "Ihita", dashboard: "Urubuga", transactionsLink: "Ibyishyuwe", downloadApp: "Kura porogaramu", contact: "Twandikire", copyright: "© 2026 VubaPay na KoraVuba Technologies | Fotora, Wishyure, Byakozwe" },
+        sw: { logout: "Toka", slogan: "KAGUA LIPA", welcome: "Karibu tena", welcomeSub: "Weka maelezo yako ya malipo kutengeneza QR code", earnings: "Mapato Yote", transactions: "Miamala Yote", qrStatus: "Tayari", qrSection: "Tengeneza QR Code Yako", momocode: "Msimbo wa MoMo", momoNumber: "Nambari ya MoMo", enterCode: "Weka msimbo wako wa tarakimu 6", enterNumber: "Weka nambari yako ya mobile money", codeHint: "Itatumika kama *182*8*1*MSIMBO#", numberHint: "Itatumika kama *182*1*1*NAMBARI#", generate: "Tengeneza QR Code", download: "Pakua QR code", customerOptions: "Chaguzi za Wateja:", option1: "Chaguo 1 (Msimbo wa MoMo):", option2: "Chaguo 2 (Nambari ya MoMo):", customerInfo: "Wateja wanaweza kutumia njia yoyote kukulipa", recent: "Miamala ya Hivi Karibuni", noTransactions: "Hakuna miamala", quickLinks: "Viungo", dashboard: "Dashibodi", transactionsLink: "Miamala", downloadApp: "Pakua Programu", contact: "Wasiliana", copyright: "© 2026 VubaPay na KoraVuba Technologies | Kagua, Lipa, Imekwisha" },
+        fr: { logout: "Déconnexion", slogan: "SCANNEZ & PAYEZ", welcome: "Bon retour", welcomeSub: "Entrez vos coordonnées pour générer votre QR code", earnings: "Gains Totaux", transactions: "Transactions Totales", qrStatus: "Prêt", qrSection: "Générez votre QR Code", momocode: "Code MoMo", momoNumber: "Numéro Mobile Money", enterCode: "Entrez votre code à 6 chiffres", enterNumber: "Entrez votre numéro Mobile Money", codeHint: "Sera utilisé comme *182*8*1*VOTRECODE#", numberHint: "Sera utilisé comme *182*1*1*VOTRENUMERO#", generate: "Générer QR Code", download: "Télécharger QR Code", customerOptions: "Options de paiement client:", option1: "Option 1 (Code MoMo):", option2: "Option 2 (Numéro MoMo):", customerInfo: "Les clients peuvent utiliser l'une ou l'autre méthode", recent: "Transactions récentes", noTransactions: "Aucune transaction", quickLinks: "Liens rapides", dashboard: "Tableau de bord", transactionsLink: "Transactions", downloadApp: "Télécharger l'application", contact: "Contact", copyright: "© 2026 VubaPay par KoraVuba Technologies | Scannez, Payez, Terminé" }
     };
 
     function loadLanguageFromStorage() {
@@ -165,7 +167,7 @@
         document.getElementById('enterNumberLabel').innerText = t.enterNumber;
         document.getElementById('codeHint').innerText = t.codeHint;
         document.getElementById('numberHint').innerText = t.numberHint;
-        document.getElementById('payGenerateBtn').innerText = t.payGenerate;
+        document.getElementById('generateBtnText').innerText = t.generate;
         document.getElementById('downloadBtnText').innerText = t.download;
         document.getElementById('customerOptionsTitle').innerText = t.customerOptions;
         document.getElementById('option1Title').innerText = t.option1;
@@ -179,30 +181,203 @@
         document.getElementById('downloadAppLink').innerText = t.downloadApp;
         document.getElementById('contactTitle').innerText = t.contact;
         document.getElementById('copyright').innerText = t.copyright;
-        document.getElementById('modalTitle').innerText = t.modalTitle;
-        document.getElementById('modalDesc').innerText = t.modalDesc;
-        document.getElementById('paymentMethodLabel').innerText = t.paymentMethod;
-        document.getElementById('modalPayBtn').innerHTML = t.modalPay;
-        document.getElementById('modalCancelBtn').innerHTML = t.modalCancel;
     }
 
     function changePageLanguage(lang) { if (translations[lang]) { localStorage.setItem('vubapay_language', lang); currentLang = lang; applyLanguage(); } }
 
-    let currentProvider = null, currentQRCode = null, selectedPaymentType = null, hasActiveQR = false;
+    let currentProvider = null, selectedPaymentType = null;
+
     function updateDateTime() { const now = new Date(); document.getElementById('currentDateTime').innerHTML = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
     setInterval(updateDateTime, 1000); updateDateTime();
-    function selectPaymentType(type) { selectedPaymentType = type; document.querySelectorAll('.payment-type-btn').forEach(btn => btn.classList.remove('active')); document.querySelector(`.payment-type-btn[data-type="${type}"]`).classList.add('active'); if (type === 'momocode') { document.getElementById('momocodeFields').style.display = 'block'; document.getElementById('momoNumberFields').style.display = 'none'; } else { document.getElementById('momocodeFields').style.display = 'none'; document.getElementById('momoNumberFields').style.display = 'block'; } }
-    async function loadDashboard() { try { const response = await fetch('/api/get-provider-data'); const data = await response.json(); if (data.success) { currentProvider = data.provider; document.getElementById('riderName').innerText = currentProvider.NAMES.split(' ')[0]; document.getElementById('walletBalance').innerText = (currentProvider.WALLET_BALANCE || 0).toLocaleString() + ' RWF'; document.getElementById('totalEarnings').innerText = (currentProvider.WALLET_BALANCE || 0).toLocaleString() + ' RWF'; if (currentProvider.PAYMENT_TYPE) { selectPaymentType(currentProvider.PAYMENT_TYPE); if (currentProvider.PAYMENT_TYPE === 'momocode' && currentProvider.PAYMENT_CODE) { document.getElementById('paymentCode').value = currentProvider.PAYMENT_CODE; document.getElementById('ussdCodeDisplay').innerHTML = `*182*8*1*${currentProvider.PAYMENT_CODE}#`; document.getElementById('ussdOption1').style.display = 'block'; } else if (currentProvider.PAYMENT_TYPE === 'momo_number' && currentProvider.MOMO_NUMBER) { document.getElementById('mobileNumber').value = currentProvider.MOMO_NUMBER; document.getElementById('ussdNumberDisplay').innerHTML = `*182*1*1*${currentProvider.MOMO_NUMBER}#`; document.getElementById('ussdOption2').style.display = 'block'; } } if (currentProvider.HELMET_QR_CODE && currentProvider.HELMET_QR_CODE !== 'pending') { hasActiveQR = true; document.getElementById('qrStatus').innerHTML = '<span style="color:#28a745;">Active</span>'; document.getElementById('downloadBtn').disabled = false; generateQRCode(); } else { hasActiveQR = false; document.getElementById('qrStatus').innerHTML = '<span style="color:#dc3545;">Not Generated</span>'; document.getElementById('downloadBtn').disabled = true; } } else { window.location.href = '/'; } } catch (error) { showAlert('Error loading dashboard', 'error'); } }
-    function generateQRCode() { let ussdString = ''; if (selectedPaymentType === 'momocode') { const code = document.getElementById('paymentCode').value; if (code && code.length === 6) ussdString = `*182*8*1*${code}#`; } else if (selectedPaymentType === 'momo_number') { const number = document.getElementById('mobileNumber').value; if (number && number.length >= 10) ussdString = `*182*1*1*${number}#`; } if (ussdString) { const telLink = `tel:${ussdString.replace(/#/g, '%23')}`; const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(telLink)}`; currentQRCode = qrUrl; document.getElementById('qrDisplay').innerHTML = `<img src="${qrUrl}" alt="QR Code" style="width:180px;height:180px;">`; } }
-    function downloadQRCode() { if (currentQRCode) { const link = document.createElement('a'); link.download = `vubapay_qr.png`; link.href = currentQRCode; link.click(); showAlert('QR Code downloaded!', 'success'); } }
-    function showPaymentModal() { if (!selectedPaymentType) { showAlert('Please select payment type', 'error'); return; } if (selectedPaymentType === 'momocode') { const code = document.getElementById('paymentCode').value; if (!code || code.length !== 6) { showAlert('Please enter a valid 6-digit payment code', 'error'); return; } } else { const number = document.getElementById('mobileNumber').value; if (!number || number.length < 10) { showAlert('Please enter a valid mobile money number (10 digits)', 'error'); return; } } document.getElementById('paymentModal').style.display = 'flex'; }
-    function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
-    async function processPayment() { const paymentMethod = document.getElementById('paymentMethod').value; const momoCode = selectedPaymentType === 'momocode' ? document.getElementById('paymentCode').value : null; const momoNumber = selectedPaymentType === 'momo_number' ? document.getElementById('mobileNumber').value : null; const submitBtn = event.target; const originalText = submitBtn.innerHTML; submitBtn.innerHTML = '<div class="loading"></div> Processing...'; submitBtn.disabled = true; try { const response = await fetch('/api/process-qr-fee', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: 200, payment_method: paymentMethod, payment_type: selectedPaymentType, payment_code: momoCode, mobile_number: momoNumber }) }); const data = await response.json(); if (data.success) { const saveResponse = await fetch('/api/save-payment-settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ payment_type: selectedPaymentType, payment_code: momoCode, mobile_number: momoNumber }) }); await saveResponse.json(); hasActiveQR = true; document.getElementById('qrStatus').innerHTML = '<span style="color:#28a745;">Active</span>'; document.getElementById('downloadBtn').disabled = false; if (selectedPaymentType === 'momocode') { document.getElementById('ussdCodeDisplay').innerHTML = `*182*8*1*${momoCode}#`; document.getElementById('ussdOption1').style.display = 'block'; } else { document.getElementById('ussdNumberDisplay').innerHTML = `*182*1*1*${momoNumber}#`; document.getElementById('ussdOption2').style.display = 'block'; } generateQRCode(); showAlert('Payment successful! QR Code generated.', 'success'); closePaymentModal(); loadDashboard(); } else { showAlert(data.message || 'Payment failed', 'error'); } } catch (error) { showAlert('Connection error. Please try again.', 'error'); } finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; } }
-    function showAlert(message, type) { const alertDiv = document.getElementById('alert'); alertDiv.className = `alert alert-${type}`; alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`; alertDiv.style.display = 'block'; setTimeout(() => alertDiv.style.display = 'none', 4000); }
-    async function logout() { await fetch('/api/logout', { method: 'POST' }); window.location.href = '/'; }
-    function loadTransactions() { document.getElementById('transactionsList').innerHTML = '<tr><td colspan="5" style="text-align:center;">No transactions yet</td></tr>'; document.getElementById('totalRides').innerText = '0'; }
-    window.onclick = function(event) { const modal = document.getElementById('paymentModal'); if (event.target === modal) closePaymentModal(); }
-    loadLanguageFromStorage(); loadDashboard(); loadTransactions();
+
+    function selectPaymentType(type) { 
+        selectedPaymentType = type; 
+        document.querySelectorAll('.payment-type-btn').forEach(btn => btn.classList.remove('active')); 
+        document.querySelector(`.payment-type-btn[data-type="${type}"]`).classList.add('active'); 
+        if (type === 'momocode') { 
+            document.getElementById('momocodeFields').style.display = 'block'; 
+            document.getElementById('momoNumberFields').style.display = 'none'; 
+        } else { 
+            document.getElementById('momocodeFields').style.display = 'none'; 
+            document.getElementById('momoNumberFields').style.display = 'block'; 
+        } 
+    }
+
+    async function loadDashboard() { 
+        try { 
+            const response = await fetch('/api/get-provider-data'); 
+            const data = await response.json(); 
+            if (data.success) { 
+                currentProvider = data.provider; 
+                document.getElementById('riderName').innerText = currentProvider.NAMES.split(' ')[0]; 
+                document.getElementById('walletBalance').innerText = (currentProvider.WALLET_BALANCE || 0).toLocaleString() + ' RWF'; 
+                document.getElementById('totalEarnings').innerText = (currentProvider.WALLET_BALANCE || 0).toLocaleString() + ' RWF'; 
+                if (currentProvider.PAYMENT_TYPE) { 
+                    selectPaymentType(currentProvider.PAYMENT_TYPE); 
+                    if (currentProvider.PAYMENT_TYPE === 'momocode' && currentProvider.PAYMENT_CODE) { 
+                        document.getElementById('paymentCode').value = currentProvider.PAYMENT_CODE; 
+                        document.getElementById('ussdCodeDisplay').innerHTML = `*182*8*1*${currentProvider.PAYMENT_CODE}#`; 
+                        document.getElementById('ussdOption1').style.display = 'block'; 
+                        generateBrandedQRCode();
+                    } else if (currentProvider.PAYMENT_TYPE === 'momo_number' && currentProvider.MOMO_NUMBER) { 
+                        document.getElementById('mobileNumber').value = currentProvider.MOMO_NUMBER; 
+                        document.getElementById('ussdNumberDisplay').innerHTML = `*182*1*1*${currentProvider.MOMO_NUMBER}#`; 
+                        document.getElementById('ussdOption2').style.display = 'block'; 
+                        generateBrandedQRCode();
+                    } 
+                } 
+            } else { 
+                window.location.href = '/'; 
+            } 
+        } catch (error) { 
+            showAlert('Error loading dashboard', 'error'); 
+        } 
+    }
+
+    async function generateBrandedQRCode() {
+        let ussdString = ''; 
+        if (selectedPaymentType === 'momocode') { 
+            const code = document.getElementById('paymentCode').value; 
+            if (code && code.length === 6) ussdString = `*182*8*1*${code}#`; 
+        } else if (selectedPaymentType === 'momo_number') { 
+            const number = document.getElementById('mobileNumber').value; 
+            if (number && number.length >= 10) ussdString = `*182*1*1*${number}#`; 
+        } 
+        
+        if (ussdString) { 
+            const telLink = `tel:${ussdString.replace(/#/g, '%23')}`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(telLink)}`;
+            
+            // Load QR image, then add text above and below
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size (QR 300x300 + text area)
+                canvas.width = 350;
+                canvas.height = 420;
+                
+                // White background
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw "VubaPay" text at top
+                ctx.fillStyle = '#006C3C';
+                ctx.font = 'bold 24px "Segoe UI", Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('VubaPay', canvas.width / 2, 40);
+                
+                // Draw QR code
+                ctx.drawImage(img, 25, 55, 300, 300);
+                
+                // Draw website text at bottom
+                ctx.fillStyle = '#006C3C';
+                ctx.font = '14px "Segoe UI", Arial';
+                ctx.fillText('Get yours from', canvas.width / 2, 380);
+                
+                ctx.fillStyle = '#FCC400';
+                ctx.font = 'bold 14px "Segoe UI", Arial';
+                ctx.fillText('www.VubaPay.netlify.com', canvas.width / 2, 400);
+                
+                // Save the branded QR code
+                currentQRCodeDataURL = canvas.toDataURL('image/png');
+                document.getElementById('qrDisplay').innerHTML = `<img src="${currentQRCodeDataURL}" alt="Branded QR Code" style="width:100%; max-width:280px; border-radius:8px;">`;
+                document.getElementById('downloadBtn').disabled = false;
+            };
+            img.src = qrApiUrl;
+        }
+    }
+
+    function generateAndSaveQR() {
+        if (!selectedPaymentType) { 
+            showAlert('Please select payment type', 'error'); 
+            return; 
+        }
+        
+        if (selectedPaymentType === 'momocode') { 
+            const code = document.getElementById('paymentCode').value; 
+            if (!code || code.length !== 6) { 
+                showAlert('Please enter a valid 6-digit payment code', 'error'); 
+                return; 
+            } 
+        } else { 
+            const number = document.getElementById('mobileNumber').value; 
+            if (!number || number.length < 10) { 
+                showAlert('Please enter a valid mobile money number (10 digits)', 'error'); 
+                return; 
+            } 
+        }
+        
+        generateBrandedQRCode();
+        
+        // Save settings to backend
+        const momoCode = selectedPaymentType === 'momocode' ? document.getElementById('paymentCode').value : null;
+        const momoNumber = selectedPaymentType === 'momo_number' ? document.getElementById('mobileNumber').value : null;
+        
+        fetch('/api/save-payment-settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                payment_type: selectedPaymentType,
+                payment_code: momoCode,
+                mobile_number: momoNumber
+            })
+        }).then(() => {
+            if (selectedPaymentType === 'momocode') {
+                document.getElementById('ussdCodeDisplay').innerHTML = `*182*8*1*${momoCode}#`;
+                document.getElementById('ussdOption1').style.display = 'block';
+            } else {
+                document.getElementById('ussdNumberDisplay').innerHTML = `*182*1*1*${momoNumber}#`;
+                document.getElementById('ussdOption2').style.display = 'block';
+            }
+            showAlert('QR Code generated successfully!', 'success');
+        }).catch(error => {
+            showAlert('QR Code generated successfully!', 'success');
+            if (selectedPaymentType === 'momocode') {
+                document.getElementById('ussdCodeDisplay').innerHTML = `*182*8*1*${momoCode}#`;
+                document.getElementById('ussdOption1').style.display = 'block';
+            } else {
+                document.getElementById('ussdNumberDisplay').innerHTML = `*182*1*1*${momoNumber}#`;
+                document.getElementById('ussdOption2').style.display = 'block';
+            }
+        });
+    }
+
+    function downloadQRCode() { 
+        if (currentQRCodeDataURL) { 
+            const link = document.createElement('a'); 
+            link.download = `vubapay_qr_${Date.now()}.png`; 
+            link.href = currentQRCodeDataURL; 
+            link.click(); 
+            showAlert('QR Code downloaded! Ready to print.', 'success'); 
+        } else { 
+            showAlert('Please generate QR code first', 'error'); 
+        } 
+    }
+
+    function showAlert(message, type) { 
+        const alertDiv = document.getElementById('alert'); 
+        alertDiv.className = `alert alert-${type}`; 
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`; 
+        alertDiv.style.display = 'block'; 
+        setTimeout(() => alertDiv.style.display = 'none', 4000); 
+    }
+
+    async function logout() { 
+        await fetch('/api/logout', { method: 'POST' }); 
+        window.location.href = '/'; 
+    }
+
+    function loadTransactions() { 
+        document.getElementById('transactionsList').innerHTML = '<tr><td colspan="5" style="text-align:center;">No transactions yet</td></tr>'; 
+        document.getElementById('totalRides').innerText = '0'; 
+    }
+
+    loadLanguageFromStorage(); 
+    loadDashboard(); 
+    loadTransactions();
 </script>
 </body>
 </html>
