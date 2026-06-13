@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VubaPay - Rider Dashboard | Manage Your Payments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f2f5;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(135deg, #006C3C 0%, #004d2a 100%);
+            color: white;
+            padding: 30px 20px;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #006C3C;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text span {
+            color: #FCC400;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item i {
+            width: 25px;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 20px 30px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome h2 {
+            color: #1a2a3a;
+            font-size: 1.5rem;
+        }
+
+        .welcome p {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #FCC400, #ffd700);
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .balance-card small {
+            color: #006C3C;
+            font-size: 0.7rem;
+        }
+
+        .balance-card h3 {
+            color: #006C3C;
+            font-size: 1.5rem;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: #006C3C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h4 {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-info h2 {
+            color: #1a2a3a;
+            font-size: 1.8rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 112, 60, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #006C3C;
+        }
+
+        /* QR Code Generator Section */
+        .qr-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #1a2a3a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qr-generator {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .qr-input-area {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .qr-input-area input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+
+        .qr-input-area input:focus {
+            outline: none;
+            border-color: #006C3C;
+        }
+
+        .qr-display-area {
+            flex: 1;
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .qr-box {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-box img {
+            width: 200px;
+            height: 200px;
+        }
+
+        .btn-generate {
+            background: #006C3C;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-generate:hover {
+            background: #008050;
+        }
+
+        .btn-download {
+            background: #FCC400;
+            color: #006C3C;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Recent Transactions */
+        .transactions-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .transactions-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            color: #006C3C;
+            background: rgba(0, 112, 60, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.8rem;
+        }
+
+        /* Helmet Sticker Guide */
+        .sticker-guide {
+            background: linear-gradient(135deg, #1a2a3a, #2a3a4a);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .sticker-guide-content h4 {
+            margin-bottom: 10px;
+        }
+
+        .sticker-guide-content p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .btn-print {
+            background: #FCC400;
+            color: #006C3C;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -280px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: #006C3C;
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-motorcycle"></i></div>
+            <div class="logo-text">Vuba<span>Pay</span></div>
+        </div>
+
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="showSection('qr')">
+            <i class="fas fa-qrcode"></i>
+            <span>Generate QR Code</span>
+        </div>
+        <div class="nav-item" onclick="showSection('transactions')">
+            <i class="fas fa-history"></i>
+            <span>Transactions</span>
+        </div>
+        <div class="nav-item" onclick="showSection('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+        <div class="nav-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="welcome">
+                <h2 id="riderName">Welcome, Rider!</h2>
+                <p>Manage your earnings and QR codes</p>
+            </div>
+            <div class="user-info">
+                <div class="balance-card">
+                    <small>Available Balance</small>
+                    <h3 id="walletBalance">0 RWF</h3>
+                </div>
+                <div class="avatar">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div id="alert" class="alert"></div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Total Earnings</h4>
+                        <h2 id="totalEarnings">0 RWF</h2>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Today's Rides</h4>
+                        <h2 id="todayRides">0</h2>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-motorcycle"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Total Rides</h4>
+                        <h2 id="totalRides">0</h2>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Payment Code</h4>
+                        <h2 id="paymentCodeDisplay">-</h2>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-code"></i></div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="qr-section">
+                <div class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Weekly Earnings</span>
+                </div>
+                <canvas id="earningsChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <!-- QR Code Generator Section -->
+        <div id="qrSection" style="display: none;">
+            <div class="qr-section">
+                <div class="section-title">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Generate Your QR Code</span>
+                </div>
+
+                <div class="qr-generator">
+                    <div class="qr-input-area">
+                        <label><strong>Your Payment Code</strong></label>
+                        <input type="text" id="paymentCodeInput" placeholder="Enter your payment code" readonly>
+                        <label><strong>USSD Code Preview</strong></label>
+                        <input type="text" id="ussdPreview" readonly style="background: #f5f5f5;">
+                        <button class="btn-generate" onclick="generateQRCode()">
+                            <i class="fas fa-qrcode"></i> Generate QR Code
+                        </button>
+                    </div>
+                    <div class="qr-display-area">
+                        <div class="qr-box">
+                            <div id="qrCodeDisplay">
+                                <i class="fas fa-qrcode" style="font-size: 150px; color: #006C3C;"></i>
+                                <p>Your QR code will appear here</p>
+                            </div>
+                        </div>
+                        <button class="btn-download" id="downloadBtn" style="display: none;" onclick="downloadQRCode()">
+                            <i class="fas fa-download"></i> Download QR Code
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Helmet Sticker Instructions -->
+                <div class="sticker-guide">
+                    <div class="sticker-guide-content">
+                        <h4><i class="fas fa-helmet-safety"></i>  Sticker Instructions</h4>
+                        <p>Print this QR code on waterproof vinyl sticker (4cm x 4cm)</p>
+                        <p>Mount on the back of your helmet, 2cm from bottom edge</p>
+                        <p>Customers can scan with any phone camera to pay instantly</p>
+                    </div>
+                    <button class="btn-print" onclick="printStickerGuide()">
+                        <i class="fas fa-print"></i> Print Instructions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactionsSection" style="display: none;">
+            <div class="transactions-section">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    <span>Recent Transactions</span>
+                </div>
+                <div class="transactions-table">
+                    <table id="transactionsTable">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Payment Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsList">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No transactions yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" style="display: none;">
+            <div class="qr-section">
+                <div class="section-title">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Rider Profile</span>
+                </div>
+                <div id="profileInfo">
+                    <!-- Profile info will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for QR Preview -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-qrcode"></i> Your QR Code</h3>
+            <div id="modalQR"></div>
+            <button class="btn-download" onclick="downloadQRCode()">Download</button>
+            <button class="btn-generate" onclick="closeModal()" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Rider Data (from localStorage or default)
+        let riderData = {
+            id: 'RID001',
+            names: 'Jean Mukasa',
+            email: 'jean.mukasa@vubapay.rw',
+            phone: '0788123456',
+            plate_number: 'RAB123B',
+            payment_code: 112299,
+            wallet_balance: 45800.00,
+            total_earnings: 45800.00,
+            today_rides: 12,
+            total_rides: 245,
+            transactions: [
+                { id: 'TXN001', amount: 1500, method: 'QR_SCAN', status: 'COMPLETED', date: '2024-01-15 14:30' },
+                { id: 'TXN002', amount: 2000, method: 'USSD', status: 'COMPLETED', date: '2024-01-15 13:15' },
+                { id: 'TXN003', amount: 1000, method: 'APP', status: 'COMPLETED', date: '2024-01-15 11:45' },
+                { id: 'TXN004', amount: 2500, method: 'QR_SCAN', status: 'COMPLETED', date: '2024-01-14 17:20' },
+                { id: 'TXN005', amount: 1800, method: 'USSD', status: 'COMPLETED', date: '2024-01-14 12:10' }
+            ]
+        };
+
+        // Load data from localStorage if exists
+        function loadRiderData() {
+            const saved = localStorage.getItem('vubapay_rider');
+            if (saved) {
+                riderData = JSON.parse(saved);
+            }
+            updateUI();
+        }
+
+        // Save to localStorage
+        function saveRiderData() {
+            localStorage.setItem('vubapay_rider', JSON.stringify(riderData));
+        }
+
+        // Update UI with rider data
+        function updateUI() {
+            document.getElementById('riderName').innerHTML = `Welcome, ${riderData.names.split(' ')[0]}!`;
+            document.getElementById('walletBalance').innerHTML = `${riderData.wallet_balance.toLocaleString()} RWF`;
+            document.getElementById('totalEarnings').innerHTML = `${riderData.total_earnings.toLocaleString()} RWF`;
+            document.getElementById('todayRides').innerHTML = riderData.today_rides;
+            document.getElementById('totalRides').innerHTML = riderData.total_rides;
+            document.getElementById('paymentCodeDisplay').innerHTML = riderData.payment_code;
+
+            // Set payment code input
+            const paymentInput = document.getElementById('paymentCodeInput');
+            if (paymentInput) {
+                paymentInput.value = riderData.payment_code;
+                document.getElementById('ussdPreview').value = `*182*8*1*${riderData.payment_code}#`;
+            }
+
+            // Update transactions table
+            const tbody = document.getElementById('transactionsList');
+            if (riderData.transactions.length > 0) {
+                tbody.innerHTML = riderData.transactions.map(t => `
+                <tr>
+                    <td>${t.id}</td>
+                    <td>${t.amount.toLocaleString()} RWF</td>
+                    <td><i class="fas fa-${t.method === 'QR_SCAN' ? 'qrcode' : (t.method === 'USSD' ? 'phone' : 'mobile-alt')}"></i> ${t.method}</td>
+                    <td><span class="status-completed">${t.status}</span></td>
+                    <td>${t.date}</td>
+                </tr>
+            `).join('');
+            }
+
+            // Update profile section
+            document.getElementById('profileInfo').innerHTML = `
+            <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                <div style="flex: 1;">
+                    <p><strong><i class="fas fa-user"></i> Full Name:</strong> ${riderData.names}</p>
+                    <p><strong><i class="fas fa-envelope"></i> Email:</strong> ${riderData.email}</p>
+                    <p><strong><i class="fas fa-phone"></i> Phone:</strong> ${riderData.phone}</p>
+                </div>
+                <div style="flex: 1;">
+                    <p><strong><i class="fas fa-motorcycle"></i> Plate Number:</strong> ${riderData.plate_number}</p>
+                    <p><strong><i class="fas fa-code"></i> Payment Code:</strong> ${riderData.payment_code}</p>
+                    <p><strong><i class="fas fa-wallet"></i> Wallet Balance:</strong> ${riderData.wallet_balance.toLocaleString()} RWF</p>
+                </div>
+            </div>
+        `;
+
+            saveRiderData();
+        }
+
+        // Generate QR Code
+        function generateQRCode() {
+            const paymentCode = document.getElementById('paymentCodeInput').value;
+            if (!paymentCode) {
+                showAlert('Please enter your payment code', 'error');
+                return;
+            }
+
+            // Create QR code using QRServer API
+            const ussdCode = `*182*8*1*${paymentCode}#`;
+            const telLink = `tel:*182*8*1*${paymentCode}%23`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(telLink)}`;
+
+            // Display QR code
+            const qrDisplay = document.getElementById('qrCodeDisplay');
+            qrDisplay.innerHTML = `<img src="${qrUrl}" alt="VubaPay QR Code" style="width: 200px; height: 200px;">`;
+
+            // Store for download
+            window.currentQRUrl = qrUrl;
+            window.currentUSSD = ussdCode;
+
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+            showAlert('QR Code generated successfully!', 'success');
+        }
+
+        function downloadQRCode() {
+            if (window.currentQRUrl) {
+                const link = document.createElement('a');
+                link.download = `vubapay_qr_${riderData.payment_code}.png`;
+                link.href = window.currentQRUrl;
+                link.click();
+                showAlert('QR Code downloaded!', 'success');
+            }
+        }
+
+        function printStickerGuide() {
+            const printContent = `
+            <html><head><title>VubaPay Sticker Guide</title></head>
+            <body style="font-family: Arial; text-align: center; padding: 20px;">
+                <h1>VubaPay Helmet QR Code</h1>
+                <img src="${window.currentQRUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=tel:*182*8*1*112299%23'}" style="width: 150px;">
+                <h2>USSD Code: ${window.currentUSSD || '*182*8*1*112299#'}</h2>
+                <hr>
+                <h3>Instructions:</h3>
+                <p>1. Print this QR code on waterproof vinyl sticker (4cm x 4cm)</p>
+                <p>2. Mount on the back of your helmet, 2cm from bottom edge</p>
+                <p>3. Customers scan with any phone camera to pay instantly</p>
+                <hr>
+                <p>VubaPay | Tora, Scanura, Vuba | No Cash, No Accident</p>
+            </body></html>
+        `;
+            const win = window.open();
+            win.document.write(printContent);
+            win.print();
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            alertDiv.style.display = 'block';
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Section navigation
+        function showSection(section) {
+            document.getElementById('dashboardSection').style.display = section === 'dashboard' ? 'block' : 'none';
+            document.getElementById('qrSection').style.display = section === 'qr' ? 'block' : 'none';
+            document.getElementById('transactionsSection').style.display = section === 'transactions' ? 'block' : 'none';
+            document.getElementById('profileSection').style.display = section === 'profile' ? 'block' : 'none';
+
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Close sidebar on mobile
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('vubapay_rider');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        // Initialize Chart
+        function initChart() {
+            const ctx = document.getElementById('earningsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Earnings (RWF)',
+                        data: [8500, 10200, 7800, 9500, 11200, 14500, 12800],
+                        borderColor: '#006C3C',
+                        backgroundColor: 'rgba(0,112,60,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load data and initialize
+        loadRiderData();
+        initChart();
+
+        // Set default USSD preview
+        if (document.getElementById('ussdPreview')) {
+            document.getElementById('ussdPreview').value = `*182*8*1*${riderData.payment_code}#`;
+        }
+    </script>
+</body>
+
+</html>

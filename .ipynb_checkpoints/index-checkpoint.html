@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VubaPay - Smart Helmet Payment System | Kigali, Rwanda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header / Navigation */
+        .navbar {
+            background: rgba(0, 112, 60, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #006C3C;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text span {
+            color: #FCC400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FCC400;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .hero-badge {
+            background: #FCC40020;
+            color: #FCC400;
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            color: #1a2a3a;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content h1 span {
+            color: #006C3C;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #006C3C;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        /* Sign In Cards Section */
+        .signin-section {
+            padding: 60px 5%;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #1a2a3a;
+            margin-bottom: 50px;
+        }
+
+        .section-title span {
+            color: #006C3C;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,112,60,0.2);
+            border-color: #006C3C;
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #006C3C, #008050);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            color: #1a2a3a;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #4a5568;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .card-btn {
+            background: #006C3C;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-btn:hover {
+            background: #008050;
+            transform: scale(1.05);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 60px 5%;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #FCC400;
+            color: #006C3C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1a2a3a;
+        }
+
+        .step p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a2a3a;
+            color: white;
+            padding: 50px 5% 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: #FCC400;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #b0b0b0;
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #FCC400;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: #FCC400;
+            transform: translateY(-3px);
+        }
+
+        .social-icons a:hover i {
+            color: #006C3C;
+        }
+
+        .social-icons i {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #b0b0b0;
+            font-size: 0.8rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal h2 {
+            text-align: center;
+            color: #006C3C;
+            margin-bottom: 30px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #006C3C;
+        }
+
+        .modal-btn {
+            width: 100%;
+            background: #006C3C;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .modal-btn:hover {
+            background: #008050;
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .modal-footer a {
+            color: #006C3C;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fas fa-motorcycle"></i>
+        </div>
+        <div class="logo-text">Vuba<span>Pay</span></div>
+    </div>
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#signin">Sign In</a>
+        <a href="#contact">Contact</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-shield-alt"></i> Rwanda's Smart Payment Solution
+        </div>
+        <h1>Scan Helmet, <span>Pay Fast</span><br>No Cash, No Accident</h1>
+        <p>Tora, Scanura, Vuba - Choose, Scan, Pay Fast. The safest way to pay for motorcycle taxis in Kigali. Just scan the QR code on the helmet and pay instantly.</p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">25K+</div>
+                <div class="stat-label">Active Riders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100K+</div>
+                <div class="stat-label">Daily Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">65%</div>
+                <div class="stat-label">Accident Reduction</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="https://placehold.co/500x400/006C3C/white?text=Helmet+QR+Code" alt="VubaPay Helmet QR Code">
+    </div>
+</section>
+
+<!-- Sign In Section -->
+<section id="signin" class="signin-section">
+    <h2 class="section-title">Welcome to <span>VubaPay</span></h2>
+    <div class="cards-container">
+        <!-- Client Card -->
+        <div class="card" onclick="openModal('client')">
+            <div class="card-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <h3>I'm a Client</h3>
+            <p>Pay for your rides quickly and safely. Scan helmet QR codes and pay in seconds.</p>
+            <button class="card-btn">Sign In as Client →</button>
+        </div>
+        
+        <!-- Service Provider Card -->
+        <div class="card" onclick="openModal('provider')">
+            <div class="card-icon">
+                <i class="fas fa-motorcycle"></i>
+            </div>
+            <h3>I'm a Rider</h3>
+            <p>Receive payments directly to your mobile money wallet. No cash, no worries.</p>
+            <button class="card-btn">Sign In as Rider →</button>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="how-it-works">
+    <h2 class="section-title">How <span>VubaPay</span> Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h4>Scan Helmet QR</h4>
+            <p>Open your camera and scan the QR code on the back of the helmet</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h4>Enter Amount</h4>
+            <p>Type the agreed fare amount and confirm payment</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h4>Pay Instantly</h4>
+            <p>Money is transferred instantly from your wallet to the rider</p>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <h4>Ride Safe</h4>
+            <p>No cash exchange means no distraction, no accidents</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact" class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>VubaPay</h4>
+            <p>Smart Helmet Payment System<br>Kigali, Rwanda</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <p><a href="#home">Home</a></p>
+            <p><a href="#how-it-works">How It Works</a></p>
+            <p><a href="#signin">Sign In</a></p>
+            <p><a href="#">Download App</a></p>
+        </div>
+        <div class="footer-section">
+            <h4>Support</h4>
+            <p><a href="#">Help Center</a></p>
+            <p><a href="#">FAQs</a></p>
+            <p><a href="#">Contact Us</a></p>
+            <p><a href="#">Safety Tips</a></p>
+        </div>
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+            <p><i class="fas fa-envelope"></i> hello@vubapay.rw</p>
+            <p><i class="fas fa-map-marker-alt"></i> KG 541 St, Kacyiru<br>Kigali, Rwanda</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 VubaPay Technologies Ltd. All rights reserved. | Tora, Scanura, Vuba - No Cash, No Accident</p>
+    </div>
+</footer>
+
+<!-- Modal for Sign In -->
+<div id="signinModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Sign In</h2>
+        <form id="signinForm" onsubmit="return handleSignIn(event)">
+            <input type="email" id="email" class="modal-input" placeholder="Email Address" required>
+            <input type="password" id="password" class="modal-input" placeholder="Password" required>
+            <button type="submit" class="modal-btn">Sign In</button>
+        </form>
+        <div class="modal-footer">
+            <a href="#">Forgot Password?</a> | <a href="#" onclick="switchToRegister()">Create Account</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentUserType = 'client';
+
+    function openModal(type) {
+        currentUserType = type;
+        const modal = document.getElementById('signinModal');
+        const title = document.getElementById('modalTitle');
+        
+        if (type === 'client') {
+            title.innerHTML = '<i class="fas fa-user"></i> Client Sign In';
+        } else {
+            title.innerHTML = '<i class="fas fa-motorcycle"></i> Rider Sign In';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('signinModal').style.display = 'none';
+        document.getElementById('signinForm').reset();
+    }
+
+    function handleSignIn(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Show loading state
+        const btn = event.target.querySelector('.modal-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Signing in...';
+        btn.disabled = true;
+        
+        // Simulate API call (replace with actual backend)
+        setTimeout(() => {
+            if (currentUserType === 'client') {
+                // Redirect to client dashboard
+                window.location.href = '/client_dashboard.html';
+            } else {
+                // Redirect to provider dashboard
+                window.location.href = '/provider_dashboard.html';
+            }
+        }, 1500);
+        
+        return false;
+    }
+
+    function switchToRegister() {
+        const title = document.getElementById('modalTitle');
+        const form = document.getElementById('signinForm');
+        
+        if (form.innerHTML.includes('Create Account')) {
+            // Switch back to sign in
+            title.innerHTML = currentUserType === 'client' ? '<i class="fas fa-user"></i> Client Sign In' : '<i class="fas fa-motorcycle"></i> Rider Sign In';
+            form.innerHTML = `
+                <input type="email" id="email" class="modal-input" placeholder="Email Address" required>
+                <input type="password" id="password" class="modal-input" placeholder="Password" required>
+                <button type="submit" class="modal-btn">Sign In</button>
+            `;
+            document.querySelector('.modal-footer').innerHTML = `<a href="#">Forgot Password?</a> | <a href="#" onclick="switchToRegister()">Create Account</a>`;
+        } else {
+            // Switch to register
+            title.innerHTML = currentUserType === 'client' ? '<i class="fas fa-user-plus"></i> Create Client Account' : '<i class="fas fa-motorcycle"></i> Become a Rider';
+            form.innerHTML = `
+                <input type="text" id="fullname" class="modal-input" placeholder="Full Name" required>
+                <input type="email" id="email" class="modal-input" placeholder="Email Address" required>
+                <input type="tel" id="phone" class="modal-input" placeholder="Phone Number" required>
+                <input type="password" id="password" class="modal-input" placeholder="Password" required>
+                <input type="password" id="confirm_password" class="modal-input" placeholder="Confirm Password" required>
+                <button type="submit" class="modal-btn">Create Account</button>
+            `;
+            document.querySelector('.modal-footer').innerHTML = `<a href="#" onclick="switchToRegister()">Back to Sign In</a>`;
+        }
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('signinModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

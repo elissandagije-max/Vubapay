@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VubaPay - Scan to Open Keypad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #006C3C 0%, #004d2a 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin: 20px 0; font-size: 2em; }
+        .subtitle { text-align: center; color: #FCC400; margin-bottom: 40px; }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .qr-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .qr-card h3 { color: #006C3C; margin-bottom: 10px; }
+        .qr-card p { color: #666; margin-bottom: 20px; font-size: 14px; }
+        .qr-card img { width: 250px; height: 250px; margin: 10px auto; display: block; }
+        .ussd-badge {
+            background: #FCC400;
+            color: #006C3C;
+            padding: 10px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        footer { text-align: center; color: white; margin-top: 40px; opacity: 0.8; }
+        @media (max-width: 700px) {
+            .qr-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 VubaPay QR Code Test</h1>
+        <div class="subtitle">Scan any QR code below with your phone camera</div>
+
+        <div class="success">
+            ✅ <strong>What will happen?</strong> When you scan these QR codes, your phone will 
+            <strong>automatically open the keypad/dialer</strong> with <strong>*182*8*1*112299#</strong> ready to call.
+            <br><br>
+            📞 <strong>Not a search engine!</strong> These QR codes use <strong>tel: URI scheme</strong> which forces the dialer to open.
+        </div>
+
+        <div class="qr-grid">
+            <div class="qr-card">
+                <h3>📱 Primary - Keypad/Dialer</h3>
+                <p>Opens phone keypad with USSD code ready</p>
+                <img src="vubapay_keypad_112299.png" alt="VubaPay Keypad QR">
+                <div class="ussd-badge">*182*8*1*112299#</div>
+            </div>
+
+            <div class="qr-card">
+                <h3>📖 With Instructions</h3>
+                <p>Includes text guide for users</p>
+                <img src="vubapay_with_instructions_112299.png" alt="VubaPay Instructions QR">
+                <div class="ussd-badge">*182*8*1*112299#</div>
+            </div>
+
+            <div class="qr-card">
+                <h3>🪖 Helmet Sticker Version</h3>
+                <p>Print on waterproof vinyl - 4cm x 4cm</p>
+                <img src="vubapay_helmet_sticker_112299.png" alt="VubaPay Helmet Sticker">
+                <div class="ussd-badge">Mount on back of helmet</div>
+            </div>
+        </div>
+
+        <div class="warning">
+            ⚠️ <strong>How to test:</strong><br>
+            1. Open your phone's camera app (no special app needed)<br>
+            2. Point at any QR code above<br>
+            3. Tap the popup that appears (it will say "Call *182*8*1*112299#" or similar)<br>
+            4. Your phone's keypad will open with the code ready!<br>
+            5. Just press the call button to dial the USSD code
+        </div>
+
+        <div class="warning">
+            🪖 <strong>For Helmet Installation:</strong><br>
+            - Print "Helmet Sticker" version at 4cm x 4cm<br>
+            - Use waterproof vinyl sticker paper<br>
+            - Mount on the back of helmet, 2cm from bottom edge<br>
+            - The QR has 30% damage tolerance (works even if scratched!)
+        </div>
+
+        <footer>
+            VubaPay | Tora, Scanura, Vuba | No Cash, No Accident<br>
+            Driver Code: 112299 | USSD: *182*8*1*112299#
+        </footer>
+    </div>
+</body>
+</html>
+    

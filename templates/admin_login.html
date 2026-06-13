@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - VubaPay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #006C3C, #004d2a);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .logo-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: #1a2a3a;
+        }
+
+        .logo h1 span {
+            color: #006C3C;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #006C3C;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #006C3C;
+        }
+
+        .tab:hover {
+            color: #006C3C;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #006C3C;
+            box-shadow: 0 0 0 3px rgba(0,112,60,0.1);
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 45px;
+            width: 100%;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #006C3C, #004d2a);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,112,60,0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #006C3C;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .resend-link a {
+            color: #006C3C;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #006C3C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .password-strength {
+            font-size: 0.7rem;
+            margin-top: 5px;
+        }
+
+        .strength-weak { color: #dc3545; }
+        .strength-medium { color: #ffc107; }
+        .strength-strong { color: #28a745; }
+
+        .form-panel {
+            transition: all 0.3s;
+        }
+
+        .otp-timer {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1>Vuba<span>Pay</span></h1>
+                <p>Administrator Portal</p>
+            </div>
+
+            <div id="alert" class="alert"></div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="login">Login</div>
+                <div class="tab" data-tab="register">Create Admin</div>
+                <div class="tab" data-tab="forgot">Forgot Password</div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="form-panel">
+                <form id="loginFormElement" onsubmit="return false;">
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="admin@vubapay.rw" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                    </button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="form-panel" style="display: none;">
+                <form id="registerFormElement" onsubmit="return false;">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="regName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="regEmail" placeholder="admin@vubapay.rw" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="regPhone" placeholder="0788000000" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="regPassword" placeholder="Create a strong password" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                        </div>
+                        <div id="passwordStrength" class="password-strength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Confirm Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Role</label>
+                        <select id="regRole">
+                            <option value="admin">Admin</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="handleRegister()">
+                        <i class="fas fa-user-plus"></i> Create Admin Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgotForm" class="form-panel" style="display: none;">
+                <div id="forgotStep1">
+                    <form id="forgotStep1Form" onsubmit="return false;">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="forgotEmail" placeholder="admin@vubapay.rw" required>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="sendOTP()">
+                            <i class="fas fa-paper-plane"></i> Send OTP
+                        </button>
+                    </form>
+                </div>
+                <div id="forgotStep2" style="display: none;">
+                    <form id="forgotStep2Form" onsubmit="return false;">
+                        <div class="form-group">
+                            <label><i class="fas fa-key"></i> Enter OTP Code</label>
+                            <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                        </div>
+                        <div class="resend-link">
+                            <a onclick="resendOTP()">Resend OTP</a>
+                        </div>
+                        <div id="otpTimer" class="otp-timer"></div>
+                        <button type="button" class="btn-primary" onclick="verifyOTP()">
+                            <i class="fas fa-check-circle"></i> Verify OTP
+                        </button>
+                    </form>
+                </div>
+                <div id="forgotStep3" style="display: none;">
+                    <form id="forgotStep3Form" onsubmit="return false;">
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> New Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="newPassword" placeholder="Enter new password" required>
+                                <i class="fas fa-eye password-toggle" onclick="togglePassword('newPassword', this)"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Confirm New Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="confirmNewPassword" placeholder="Confirm new password" required>
+                                <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmNewPassword', this)"></i>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="resetPassword()">
+                            <i class="fas fa-sync-alt"></i> Reset Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="/"><i class="fas fa-arrow-left"></i> Back to Main Site</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let resetEmail = '';
+        let otpExpiry = null;
+        let otpTimerInterval = null;
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById('loginForm').style.display = tabName === 'login' ? 'block' : 'none';
+                document.getElementById('registerForm').style.display = tabName === 'register' ? 'block' : 'none';
+                document.getElementById('forgotForm').style.display = tabName === 'forgot' ? 'block' : 'none';
+                
+                if (tabName === 'forgot') {
+                    document.getElementById('forgotStep1').style.display = 'block';
+                    document.getElementById('forgotStep2').style.display = 'none';
+                    document.getElementById('forgotStep3').style.display = 'none';
+                }
+                
+                clearAlert();
+            });
+        });
+
+        function togglePassword(inputId, element) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                element.classList.remove('fa-eye');
+                element.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                element.classList.remove('fa-eye-slash');
+                element.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        const regPassword = document.getElementById('regPassword');
+        if (regPassword) {
+            regPassword.addEventListener('input', function() {
+                const password = this.value;
+                const strengthDiv = document.getElementById('passwordStrength');
+                
+                if (password.length === 0) {
+                    strengthDiv.innerHTML = '';
+                    return;
+                }
+                
+                let strength = 'weak';
+                let strengthText = 'Weak';
+                let strengthClass = 'strength-weak';
+                
+                if (password.length >= 8 && /[a-z]/.test(password) && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) {
+                    strength = 'strong';
+                    strengthText = 'Strong';
+                    strengthClass = 'strength-strong';
+                } else if (password.length >= 6 && /[a-z]/.test(password) && /[0-9]/.test(password)) {
+                    strength = 'medium';
+                    strengthText = 'Medium';
+                    strengthClass = 'strength-medium';
+                }
+                
+                strengthDiv.innerHTML = `Password strength: <span class="${strengthClass}">${strengthText}</span>`;
+            });
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearAlert() {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.style.display = 'none';
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAlert('Please enter email and password', 'error');
+                return;
+            }
+            
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Logging in...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Login failed', 'error');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function handleRegister() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const role = document.getElementById('regRole').value;
+            
+            if (!name || !email || !phone || !password) {
+                showAlert('All fields are required', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match!', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Creating account...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, password, role })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    setTimeout(() => {
+                        document.querySelector('.tab[data-tab="login"]').click();
+                        document.getElementById('loginEmail').value = email;
+                    }, 2000);
+                } else {
+                    showAlert(data.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function sendOTP() {
+            const email = document.getElementById('forgotEmail').value;
+            
+            if (!email) {
+                showAlert('Please enter your email address', 'error');
+                return;
+            }
+            
+            resetEmail = email;
+            
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Sending OTP...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    
+                    // Start OTP expiry timer (2 minutes)
+                    otpExpiry = Date.now() + 120000;
+                    startOTPTimer();
+                    
+                    document.getElementById('forgotStep1').style.display = 'none';
+                    document.getElementById('forgotStep2').style.display = 'block';
+                } else {
+                    showAlert(data.message || 'Failed to send OTP', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        function startOTPTimer() {
+            if (otpTimerInterval) clearInterval(otpTimerInterval);
+            
+            otpTimerInterval = setInterval(() => {
+                const remaining = otpExpiry - Date.now();
+                if (remaining <= 0) {
+                    clearInterval(otpTimerInterval);
+                    document.getElementById('otpTimer').innerHTML = 'OTP expired. Please request a new one.';
+                } else {
+                    const minutes = Math.floor(remaining / 60000);
+                    const seconds = Math.floor((remaining % 60000) / 1000);
+                    document.getElementById('otpTimer').innerHTML = `OTP expires in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        async function verifyOTP() {
+            const otpCode = document.getElementById('otpCode').value;
+            
+            if (!otpCode || otpCode.length !== 6) {
+                showAlert('Please enter a valid 6-digit OTP', 'error');
+                return;
+            }
+            
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Verifying...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: resetEmail, otp: otpCode })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('OTP verified! Please enter your new password.', 'success');
+                    
+                    if (otpTimerInterval) clearInterval(otpTimerInterval);
+                    
+                    document.getElementById('forgotStep2').style.display = 'none';
+                    document.getElementById('forgotStep3').style.display = 'block';
+                } else {
+                    showAlert(data.message || 'Invalid OTP', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function resendOTP() {
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: resetEmail })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('New OTP sent successfully!', 'success');
+                    otpExpiry = Date.now() + 120000;
+                    startOTPTimer();
+                } else {
+                    showAlert(data.message || 'Failed to send OTP', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function resetPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            
+            if (!newPassword || !confirmPassword) {
+                showAlert('Please enter new password', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showAlert('Passwords do not match!', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showAlert('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Resetting password...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/admin/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: resetEmail, new_password: newPassword })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Password reset successful! Please login with your new password.', 'success');
+                    
+                    setTimeout(() => {
+                        document.querySelector('.tab[data-tab="login"]').click();
+                        document.getElementById('loginEmail').value = resetEmail;
+                        document.getElementById('forgotStep1').style.display = 'block';
+                        document.getElementById('forgotStep2').style.display = 'none';
+                        document.getElementById('forgotStep3').style.display = 'none';
+                    }, 2000);
+                } else {
+                    showAlert(data.message || 'Failed to reset password', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

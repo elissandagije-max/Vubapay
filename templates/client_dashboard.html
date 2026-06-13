@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VubaPay - Client Dashboard | Scan & Pay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+        .header {
+            background: #ffffff;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 42px; height: 42px; background: #006C3C; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.5rem; color: white; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+        .logo-text span { color: #006C3C; }
+        .chessx-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; color: #64748b; }
+        .header-right { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .balance-badge {
+            background: #f8fafc; padding: 8px 18px; border-radius: 40px;
+            display: flex; align-items: center; gap: 10px; border: 1px solid #e2e8f0;
+        }
+        .balance-badge i { color: #006C3C; }
+        .balance-badge span { font-weight: 600; font-size: 1rem; color: #1e293b; }
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .language-selector { position: relative; display: inline-block; }
+        .lang-btn { background: #f1f5f9; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+        .lang-dropdown { position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; min-width: 140px; display: none; z-index: 100; margin-top: 8px; overflow: hidden; }
+        .language-selector:hover .lang-dropdown { display: block; }
+        .lang-option { padding: 8px 12px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .lang-option:hover { background: #f1f5f9; }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 16px; }
+        .welcome-card { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; padding: 25px; margin-bottom: 20px; color: white; }
+        .welcome-card h2 { font-size: 1.5rem; margin-bottom: 5px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; border-radius: 16px; padding: 15px; display: flex; align-items: center; gap: 12px; border: 1px solid #e2e8f0; }
+        .stat-icon { width: 45px; height: 45px; background: #e6f7ec; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #006C3C; }
+        .stat-info h4 { font-size: 0.7rem; color: #64748b; }
+        .stat-info .stat-value { font-size: 1.3rem; font-weight: bold; color: #006C3C; }
+        .scanner-section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; text-align: center; border: 1px solid #e2e8f0; }
+        .scanner-title { font-size: 1.2rem; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .scanner-container { position: relative; width: 100%; max-width: 350px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #000; }
+        #video { width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; }
+        .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid #FCC400; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); pointer-events: none; }
+        .scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #FCC400; animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .scanner-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .btn-scanner { background: #006C3C; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-scanner-secondary { background: #FCC400; color: #006C3C; }
+        .manual-section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .section-title { font-size: 1rem; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .input-group { display: flex; gap: 10px; }
+        .input-group input { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; text-align: center; }
+        .input-group button { background: #006C3C; color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; }
+        .payment-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .payment-content { background: white; border-radius: 16px; padding: 25px; width: 90%; max-width: 400px; position: relative; }
+        .close-payment { position: absolute; top: 15px; right: 20px; font-size: 1.3rem; cursor: pointer; color: #999; }
+        .rider-info { background: #f8fafc; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
+        .rider-info h3 { color: #006C3C; margin-bottom: 5px; }
+        .amount-input { width: 100%; padding: 12px; font-size: 1.2rem; text-align: center; border: 1px solid #e2e8f0; border-radius: 10px; margin: 15px 0; }
+        .network-select { display: flex; gap: 15px; margin: 15px 0; }
+        .network-option { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center; cursor: pointer; }
+        .network-option.selected { border-color: #006C3C; background: #e6f7ec; }
+        .network-option i { font-size: 1.2rem; display: block; margin-bottom: 5px; }
+        .fee-info { background: #fff3cd; padding: 10px; border-radius: 8px; font-size: 0.75rem; margin: 10px 0; }
+        .btn-pay { width: 100%; background: #006C3C; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .transactions-section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+        .transaction-info h4 { font-size: 0.85rem; color: #1e293b; }
+        .transaction-info p { font-size: 0.7rem; color: #64748b; }
+        .transaction-amount { font-weight: bold; color: #dc3545; }
+        .alert { position: fixed; bottom: 20px; left: 20px; right: 20px; padding: 12px; border-radius: 10px; z-index: 3000; display: none; text-align: center; }
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        .footer { background: #0f172a; color: #94a3b8; padding: 30px 5% 15px; margin-top: 30px; }
+        .footer-bottom { text-align: center; padding-top: 20px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.7rem; }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } .scanner-buttons { flex-direction: column; } .network-select { flex-direction: column; } }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-icon"><i class="fas fa-user"></i></div>
+        <div class="logo-text">Vuba<span>Pay</span></div>
+        <div class="chessx-badge">Client</div>
+    </div>
+    <div class="header-right">
+        <div class="balance-badge"><i class="fas fa-wallet"></i><span id="walletBalance">0 RWF</span></div>
+        <div class="language-selector">
+            <div class="lang-btn"><i class="fas fa-globe"></i><span id="currentLang">English</span><i class="fas fa-chevron-down"></i></div>
+            <div class="lang-dropdown">
+                <div class="lang-option" onclick="changePageLanguage('en')">🇬🇧 English</div>
+                <div class="lang-option" onclick="changePageLanguage('rw')">🇷🇼 Kinyarwanda</div>
+                <div class="lang-option" onclick="changePageLanguage('sw')">🇹🇿 Kiswahili</div>
+                <div class="lang-option" onclick="changePageLanguage('fr')">🇫🇷 Français</div>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Logout</span></button>
+    </div>
+</header>
+
+<div class="container">
+    <div class="welcome-card"><h2><span id="welcomeText">Welcome</span>, <span id="clientName">Client</span>! 👋</h2><p id="welcomeSubtext">Scan any VubaPay QR code to pay instantly</p></div>
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-qrcode"></i></div><div class="stat-info"><h4 id="totalPaymentsTitle">Total Payments</h4><div class="stat-value" id="totalRides">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-info"><h4 id="totalSpentTitle">Total Spent</h4><div class="stat-value" id="totalSpent">0 RWF</div></div></div>
+    </div>
+    <div class="scanner-section"><div class="scanner-title"><i class="fas fa-qrcode"></i><span id="scanTitle">Scan QR Code</span></div>
+        <div class="scanner-container"><video id="video" playsinline autoplay></video><div class="scan-overlay"></div><div class="scan-line"></div></div>
+        <div class="scanner-buttons"><button class="btn-scanner" onclick="startScanner()"><i class="fas fa-camera"></i> <span id="startBtn">Start Scanner</span></button>
+        <button class="btn-scanner btn-scanner-secondary" onclick="stopScanner()"><i class="fas fa-stop"></i> <span id="stopBtn">Stop</span></button></div>
+        <p style="font-size: 0.7rem; margin-top: 10px;"><i class="fas fa-info-circle"></i> <span id="cameraHint">Point camera at the QR code</span></p>
+    </div>
+    <div class="manual-section"><div class="section-title"><i class="fas fa-keyboard"></i><span id="manualTitle">Or Enter Payment Code Manually</span></div>
+        <div class="input-group"><input type="text" id="manualCode" placeholder="Enter 6-digit code" maxlength="6"><button onclick="manualLookup()"><i class="fas fa-search"></i></button></div>
+    </div>
+    <div class="transactions-section"><div class="section-title"><i class="fas fa-history"></i><span id="recentTitle">Recent Transactions</span></div>
+        <div id="transactionsList"><div class="transaction-item"><div class="transaction-info"><h4 id="noTransactions">No transactions yet</h4><p id="scanPrompt">Scan a QR code to make a payment</p></div></div></div>
+    </div>
+</div>
+
+<footer class="footer"><div class="footer-bottom"><p id="copyright">&copy; 2024 VubaPay by ChessX Technologies | Scan, Pay, Done</p></div></footer>
+
+<div id="paymentModal" class="payment-modal"><div class="payment-content"><span class="close-payment" onclick="closePaymentModal()">&times;</span><h2 style="text-align:center;color:#006C3C;"><span id="paymentTitle">Make Payment</span></h2>
+    <div id="riderInfo" class="rider-info"><i class="fas fa-motorcycle" style="font-size:2rem;color:#006C3C;"></i><h3 id="riderName">Rider Name</h3><p id="riderPlate">Plate: ---</p></div>
+    <input type="number" id="paymentAmount" class="amount-input" placeholder="Enter amount in RWF" min="100">
+    <div class="network-select"><div class="network-option" data-network="MTN" onclick="selectNetwork(this)"><i class="fas fa-charging-station"></i><span>MTN MoMo</span></div>
+    <div class="network-option" data-network="AIRTEL" onclick="selectNetwork(this)"><i class="fas fa-wifi"></i><span>Airtel Money</span></div></div>
+    <div class="fee-info"><i class="fas fa-info-circle"></i> <span id="feeText">Platform fee: 0.5%</span></div>
+    <button class="btn-pay" onclick="processPayment()"><i class="fas fa-check-circle"></i> <span id="confirmBtn">Confirm Payment</span></button>
+</div></div>
+
+<div id="alert" class="alert"></div>
+
+<script>
+    // ============ GLOBAL LANGUAGE PERSISTENCE ============
+    let currentLang = 'en';
+    
+    const translations = {
+        en: {
+            logout: "Logout", welcome: "Welcome", welcomeSub: "Scan any VubaPay QR code to pay instantly",
+            totalPayments: "Total Payments", totalSpent: "Total Spent", scanTitle: "Scan QR Code",
+            startBtn: "Start Scanner", stopBtn: "Stop", cameraHint: "Point camera at the QR code",
+            manualTitle: "Or Enter Payment Code Manually", recentTitle: "Recent Transactions",
+            noTransactions: "No transactions yet", scanPrompt: "Scan a QR code to make a payment",
+            paymentTitle: "Make Payment", feeText: "Platform fee: 0.5%", confirmBtn: "Confirm Payment",
+            copyright: "© 2024 VubaPay by ChessX Technologies | Scan, Pay, Done"
+        },
+        rw: {
+            logout: "Sohora", welcome: "Murakaza neza", welcomeSub: "Kanda QR code yose ya VubaPay wishyure vuba",
+            totalPayments: "Ibyishyuwe Byose", totalSpent: "Amafaranga Yakoreshejwe", scanTitle: "Kanda QR Code",
+            startBtn: "Tangiza", stopBtn: "Hagarika", cameraHint: "Yerekanisha kamera kuri QR code",
+            manualTitle: "Cyangwa andika kode", recentTitle: "Ibyishyuwe vuba",
+            noTransactions: "Nta byishyuwe", scanPrompt: "Kanda QR code wishyure",
+            paymentTitle: "Kora Icyishyura", feeText: "Umusanzu wa platform: 0.5%", confirmBtn: "Emeza Icyishyura",
+            copyright: "© 2024 VubaPay na ChessX Technologies | Kanda, Wishyure, Byakozwe"
+        },
+        sw: {
+            logout: "Toka", welcome: "Karibu", welcomeSub: "Kagua QR code yoyote ya VubaPay ulipe papo hapo",
+            totalPayments: "Malipo Yote", totalSpent: "Kiasi Kilichotumika", scanTitle: "Kagua QR Code",
+            startBtn: "Anza", stopBtn: "Simamisha", cameraHint: "Elekeza kamera kwenye QR code",
+            manualTitle: "Au Weka Msimbo kwa Mikono", recentTitle: "Miamala ya Hivi Karibuni",
+            noTransactions: "Hakuna miamala", scanPrompt: "Kagua QR code kulipa",
+            paymentTitle: "Fanya Malipo", feeText: "Ada ya platform: 0.5%", confirmBtn: "Thibitisha Malipo",
+            copyright: "© 2024 VubaPay na ChessX Technologies | Kagua, Lipa, Imekwisha"
+        },
+        fr: {
+            logout: "Déconnexion", welcome: "Bienvenue", welcomeSub: "Scannez n'importe quel QR code VubaPay pour payer instantanément",
+            totalPayments: "Total Paiements", totalSpent: "Total Dépensé", scanTitle: "Scanner QR Code",
+            startBtn: "Démarrer", stopBtn: "Arrêter", cameraHint: "Pointez l'appareil photo vers le QR code",
+            manualTitle: "Ou entrez le code manuellement", recentTitle: "Transactions récentes",
+            noTransactions: "Aucune transaction", scanPrompt: "Scannez un QR code pour effectuer un paiement",
+            paymentTitle: "Effectuer le paiement", feeText: "Frais de plateforme: 0.5%", confirmBtn: "Confirmer le paiement",
+            copyright: "© 2024 VubaPay par ChessX Technologies | Scannez, Payez, Terminé"
+        }
+    };
+
+    // Load language from localStorage (set by index page)
+    function loadLanguageFromStorage() {
+        const savedLang = localStorage.getItem('vubapay_language');
+        if (savedLang && translations[savedLang]) {
+            currentLang = savedLang;
+        } else {
+            currentLang = 'en';
+            localStorage.setItem('vubapay_language', 'en');
+        }
+        applyLanguage();
+    }
+
+    function applyLanguage() {
+        const t = translations[currentLang];
+        const langNames = { en: 'English', rw: 'Kinyarwanda', sw: 'Kiswahili', fr: 'Français' };
+        document.getElementById('currentLang').innerText = langNames[currentLang];
+        document.getElementById('logoutText').innerText = t.logout;
+        document.getElementById('welcomeText').innerText = t.welcome;
+        document.getElementById('welcomeSubtext').innerText = t.welcomeSub;
+        document.getElementById('totalPaymentsTitle').innerText = t.totalPayments;
+        document.getElementById('totalSpentTitle').innerText = t.totalSpent;
+        document.getElementById('scanTitle').innerText = t.scanTitle;
+        document.getElementById('startBtn').innerText = t.startBtn;
+        document.getElementById('stopBtn').innerText = t.stopBtn;
+        document.getElementById('cameraHint').innerText = t.cameraHint;
+        document.getElementById('manualTitle').innerText = t.manualTitle;
+        document.getElementById('recentTitle').innerText = t.recentTitle;
+        document.getElementById('noTransactions').innerText = t.noTransactions;
+        document.getElementById('scanPrompt').innerText = t.scanPrompt;
+        document.getElementById('paymentTitle').innerText = t.paymentTitle;
+        document.getElementById('feeText').innerText = t.feeText;
+        document.getElementById('confirmBtn').innerText = t.confirmBtn;
+        document.getElementById('copyright').innerText = t.copyright;
+    }
+
+    function changePageLanguage(lang) {
+        if (translations[lang]) {
+            localStorage.setItem('vubapay_language', lang);
+            currentLang = lang;
+            applyLanguage();
+            // Also reload any dynamic content
+            updateUI();
+        }
+    }
+
+    let currentRider = null, selectedNetwork = null, videoStream = null, scanning = false, currentPaymentCode = null;
+    let clientData = { id: 1, name: "", balance: 25000, totalSpent: 0, totalRides: 0, transactions: [] };
+
+    async function loadClientData() {
+        try {
+            const response = await fetch('/api/get-client-data');
+            const data = await response.json();
+            if (data.success) {
+                clientData.name = data.client.NAMES.split(' ')[0];
+                clientData.balance = data.client.WALLET_BALANCE;
+                updateUI();
+            } else {
+                clientData.name = "Client";
+                updateUI();
+            }
+        } catch (e) {
+            clientData.name = "Client";
+            updateUI();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('clientName').innerText = clientData.name;
+        document.getElementById('walletBalance').innerText = clientData.balance.toLocaleString() + ' RWF';
+        document.getElementById('totalSpent').innerText = clientData.totalSpent.toLocaleString() + ' RWF';
+        document.getElementById('totalRides').innerText = clientData.totalRides;
+        updateTransactionsList();
+    }
+
+    function updateTransactionsList() {
+        const container = document.getElementById('transactionsList');
+        if (clientData.transactions.length === 0) {
+            const t = translations[currentLang];
+            container.innerHTML = `<div class="transaction-item"><div class="transaction-info"><h4>${t.noTransactions}</h4><p>${t.scanPrompt}</p></div></div>`;
+        } else {
+            container.innerHTML = clientData.transactions.map(t => `<div class="transaction-item"><div class="transaction-info"><h4>${t.riderName}</h4><p>${t.date} • ${t.method}</p></div><div class="transaction-amount">- ${t.amount.toLocaleString()} RWF</div></div>`).join('');
+        }
+    }
+
+    async function startScanner() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            document.getElementById('video').srcObject = stream;
+            videoStream = stream;
+            scanning = true;
+            scanQRCode();
+            showAlert('Scanner started', 'success');
+        } catch (err) { showAlert('Camera access denied', 'error'); }
+    }
+
+    function stopScanner() {
+        if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); videoStream = null; }
+        scanning = false;
+        showAlert('Scanner stopped', 'success');
+    }
+
+    async function scanQRCode() {
+        if (!scanning) return;
+        const video = document.getElementById('video');
+        if (video.videoWidth > 0) {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            if ('BarcodeDetector' in window) {
+                try {
+                    const detector = new BarcodeDetector({ formats: ['qr_code'] });
+                    const barcodes = await detector.detect(canvas);
+                    for (const barcode of barcodes) {
+                        let data = barcode.rawValue;
+                        scanning = false;
+                        stopScanner();
+                        let code = extractCode(data);
+                        if (code) await lookupRider(code);
+                        return;
+                    }
+                } catch (e) {}
+            }
+        }
+        requestAnimationFrame(scanQRCode);
+    }
+
+    function extractCode(data) {
+        const match = data.match(/tel:\*182\*8\*1\*(\d+)%23/);
+        if (match) return match[1];
+        const ussd = data.match(/\*182\*8\*1\*(\d+)#/);
+        if (ussd) return ussd[1];
+        const plain = data.match(/^(\d{6})$/);
+        if (plain) return plain[1];
+        return null;
+    }
+
+    async function manualLookup() {
+        const code = document.getElementById('manualCode').value.trim();
+        if (!code || code.length !== 6) { showAlert('Enter valid 6-digit code', 'error'); return; }
+        document.getElementById('manualCode').value = '';
+        await lookupRider(code);
+    }
+
+    async function lookupRider(code) {
+        currentPaymentCode = code;
+        showAlert('Looking up rider...', 'success');
+        try {
+            const response = await fetch(`/api/rider/${code}`);
+            const data = await response.json();
+            if (data.success) { currentRider = data.rider; showPaymentModal(currentRider); }
+            else { showAlert('Rider not found', 'error'); }
+        } catch (e) { currentRider = { name: "Test Rider", plate: "RAB123B" }; showPaymentModal(currentRider); }
+    }
+
+    function showPaymentModal(rider) {
+        document.getElementById('riderName').innerText = rider.NAMES || rider.name;
+        document.getElementById('riderPlate').innerText = `Plate: ${rider.PLATE_NUMBER || rider.plate}`;
+        document.getElementById('paymentAmount').value = '';
+        document.getElementById('paymentModal').style.display = 'flex';
+        selectedNetwork = null;
+        document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
+    }
+
+    function selectNetwork(el) {
+        document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedNetwork = el.getAttribute('data-network');
+    }
+
+    function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; currentRider = null; selectedNetwork = null; }
+
+    async function processPayment() {
+        const amount = parseInt(document.getElementById('paymentAmount').value);
+        if (!amount || amount < 100) { showAlert('Enter valid amount (min 100 RWF)', 'error'); return; }
+        if (!selectedNetwork) { showAlert('Select payment provider', 'error'); return; }
+        if (amount > clientData.balance) { showAlert('Insufficient balance', 'error'); return; }
+        const fee = amount * 0.005;
+        if (confirm(`Confirm payment of ${amount.toLocaleString()} RWF?\nFee: ${fee.toFixed(0)} RWF`)) {
+            clientData.balance -= amount;
+            document.getElementById('walletBalance').innerText = clientData.balance.toLocaleString() + ' RWF';
+            clientData.transactions.unshift({ riderName: currentRider.NAMES || currentRider.name, amount: amount, method: selectedNetwork, date: new Date().toLocaleString() });
+            clientData.totalSpent += amount;
+            clientData.totalRides++;
+            updateTransactionsList();
+            document.getElementById('totalSpent').innerText = clientData.totalSpent.toLocaleString() + ' RWF';
+            document.getElementById('totalRides').innerText = clientData.totalRides;
+            showAlert('Payment successful!', 'success');
+            closePaymentModal();
+        }
+    }
+
+    function showAlert(msg, type) {
+        const div = document.getElementById('alert');
+        div.className = `alert alert-${type}`;
+        div.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+        div.style.display = 'block';
+        setTimeout(() => div.style.display = 'none', 3000);
+    }
+
+    async function logout() { await fetch('/api/logout', { method: 'POST' }); window.location.href = '/'; }
+
+    loadLanguageFromStorage();
+    loadClientData();
+</script>
+</body>
+</html>

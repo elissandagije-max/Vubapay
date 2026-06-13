@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VubaPay - Smart Payment System | Digitalize Your Business</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .header {
+            background: #ffffff;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 40px; height: 40px; background: #006C3C; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.5rem; color: white; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+        .logo-text span { color: #006C3C; }
+        .chessx-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; margin-left: 8px; color: #64748b; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: #475569; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover { color: #006C3C; }
+        .language-selector { position: relative; display: inline-block; }
+        .lang-btn { background: #f1f5f9; border: 1px solid #e2e8f0; padding: 8px 14px; border-radius: 30px; cursor: pointer; font-size: 0.8rem; font-weight: 500; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        .lang-btn:hover { background: #e2e8f0; }
+        .lang-dropdown { position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); min-width: 150px; display: none; z-index: 100; margin-top: 8px; overflow: hidden; }
+        .language-selector:hover .lang-dropdown { display: block; }
+        .lang-option { padding: 10px 16px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+        .lang-option:hover { background: #f1f5f9; }
+        .lang-option.active { background: #e6f7ec; color: #006C3C; }
+        .hero { display: flex; align-items: center; justify-content: space-between; padding: 4rem 5%; gap: 3rem; flex-wrap: wrap; }
+        .hero-content { flex: 1; min-width: 280px; }
+        .hero-badge { background: #e6f7ec; color: #006C3C; padding: 0.4rem 1rem; border-radius: 50px; display: inline-block; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .hero-content h1 { font-size: 3rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-bottom: 1.25rem; }
+        .hero-content h1 span { color: #006C3C; }
+        .hero-content p { font-size: 1.1rem; color: #475569; line-height: 1.5; margin-bottom: 2rem; }
+        .hero-stats { display: flex; gap: 2rem; margin-top: 2rem; }
+        .stat-item .stat-number { font-size: 1.8rem; font-weight: 700; color: #006C3C; }
+        .stat-item .stat-label { font-size: 0.8rem; color: #64748b; }
+        .hero-image { flex: 1; min-width: 280px; background: #e6f7ec; border-radius: 2rem; padding: 2rem; text-align: center; }
+        .qr-preview { background: white; padding: 1.5rem; border-radius: 1.5rem; display: inline-block; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1); }
+        .qr-preview i { font-size: 5rem; color: #006C3C; }
+        .digital-banner { background: linear-gradient(135deg, #0f172a, #1e293b); margin: 2rem 5%; padding: 2.5rem; border-radius: 1.5rem; text-align: center; color: white; }
+        .digital-banner h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .business-tags { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+        .business-tags span { background: rgba(255,255,255,0.1); padding: 0.5rem 1.25rem; border-radius: 50px; font-size: 0.85rem; }
+        .login-section { padding: 4rem 5%; background: #ffffff; }
+        .section-title { text-align: center; font-size: 1.8rem; font-weight: 700; color: #0f172a; margin-bottom: 2.5rem; }
+        .section-title span { color: #006C3C; }
+        .cards-container { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
+        .card { background: #ffffff; border-radius: 1.5rem; padding: 2rem; width: 320px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer; border: 1px solid #e2e8f0; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 35px -10px rgba(0,112,60,0.15); border-color: #006C3C; }
+        .card-icon { width: 70px; height: 70px; background: #e6f7ec; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 2rem; color: #006C3C; }
+        .card h3 { font-size: 1.3rem; color: #0f172a; margin-bottom: 0.5rem; }
+        .card p { color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.4; }
+        .card-btn { background: #006C3C; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; }
+        .card-btn:hover { background: #008050; }
+        .how-it-works { padding: 4rem 5%; background: #f8fafc; }
+        .steps { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+        .step { flex: 1; min-width: 180px; text-align: center; padding: 1.5rem; }
+        .step-number { width: 45px; height: 45px; background: #006C3C; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; margin: 0 auto 1rem; }
+        .footer { background: #0f172a; color: #94a3b8; padding: 3rem 5% 1.5rem; margin-top: 2rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .footer-section h4 { color: white; margin-bottom: 1rem; font-size: 1rem; }
+        .footer-section p, .footer-section a { color: #94a3b8; text-decoration: none; font-size: 0.85rem; line-height: 1.8; }
+        .footer-section a:hover { color: #FCC400; }
+        .social-icons { display: flex; gap: 0.8rem; margin-top: 1rem; }
+        .social-icons a { width: 35px; height: 35px; background: rgba(255,255,255,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .social-icons a:hover { background: #FCC400; }
+        .social-icons a:hover i { color: #0f172a; }
+        .footer-bottom { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.7rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 1.5rem; padding: 2rem; width: 90%; max-width: 450px; position: relative; animation: modalFadeIn 0.2s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .close-modal { position: absolute; top: 1rem; right: 1.5rem; font-size: 1.3rem; cursor: pointer; color: #94a3b8; }
+        .modal h2 { text-align: center; color: #006C3C; font-size: 1.3rem; margin-bottom: 1.5rem; }
+        .modal-input { width: 100%; padding: 0.8rem 1rem; margin: 0.5rem 0; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.9rem; }
+        .modal-input:focus { outline: none; border-color: #006C3C; }
+        .modal-btn { width: 100%; background: #006C3C; color: white; border: none; padding: 0.8rem; border-radius: 0.75rem; font-size: 0.9rem; font-weight: 600; margin-top: 1rem; cursor: pointer; }
+        .modal-footer { text-align: center; margin-top: 1rem; font-size: 0.8rem; }
+        .modal-footer a { color: #006C3C; cursor: pointer; text-decoration: none; }
+        .alert { padding: 0.7rem; border-radius: 0.75rem; margin-bottom: 1rem; display: none; font-size: 0.8rem; }
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        @media (max-width: 768px) { .hero-content h1 { font-size: 2rem; } .header { flex-direction: column; } .card { width: 100%; } }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-icon"><i class="fas fa-qrcode"></i></div>
+        <div class="logo-text">Vuba<span>Pay</span></div>
+        <div class="chessx-badge">by ChessX</div>
+    </div>
+    <div class="nav-links">
+        <a id="navHome" onclick="scrollToSection('home')">Home</a>
+        <a id="navHowItWorks" onclick="scrollToSection('how-it-works')">How It Works</a>
+        <a id="navSignIn" onclick="scrollToSection('login')">Sign In</a>
+        <a id="navContact" onclick="scrollToSection('contact')">Contact</a>
+        <div class="language-selector">
+            <div class="lang-btn"><i class="fas fa-globe"></i><span id="currentLang">English</span><i class="fas fa-chevron-down"></i></div>
+            <div class="lang-dropdown">
+                <div class="lang-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+                <div class="lang-option" onclick="changeLanguage('rw')">🇷🇼 Kinyarwanda</div>
+                <div class="lang-option" onclick="changeLanguage('sw')">🇹🇿 Kiswahili</div>
+                <div class="lang-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="home" class="hero">
+    <div class="hero-content">
+        <div class="hero-badge" id="heroBadge"><i class="fas fa-bolt"></i> Digital Payment Made Simple</div>
+        <h1 id="heroTitle">Scan <span>QR Code</span><br>Pay Instantly</h1>
+        <p id="heroDesc">No more typing errors, no more asking for payment details. Just scan, pay, and go.</p>
+        <div class="hero-stats">
+            <div class="stat-item"><div class="stat-number">25K+</div><div class="stat-label" id="statUsers">Active Users</div></div>
+            <div class="stat-item"><div class="stat-number">100K+</div><div class="stat-label" id="statTxns">Transactions</div></div>
+            <div class="stat-item"><div class="stat-number">99.9%</div><div class="stat-label" id="statError">Error-Free</div></div>
+        </div>
+    </div>
+    <div class="hero-image"><div class="qr-preview"><i class="fas fa-qrcode"></i><p id="scanToPay">Scan to Pay</p></div></div>
+</section>
+
+<div class="digital-banner">
+    <h2 id="digitalTitle">🚀 Digitalize Your Business Today!</h2>
+    <p id="digitalDesc">Smart payment solution - No more typing errors - Accept payments via QR code</p>
+    <div class="business-tags">
+        <span id="tagShops"><i class="fas fa-store"></i> Small Shops</span>
+        <span id="tagSupermarkets"><i class="fas fa-shopping-cart"></i> Supermarkets</span>
+        <span id="tagWeddings"><i class="fas fa-heart"></i> Wedding Support</span>
+        <span id="tagProviders"><i class="fas fa-briefcase"></i> Service Providers</span>
+    </div>
+</div>
+
+<section id="login" class="login-section">
+    <h2 class="section-title" id="welcomeTitle">Welcome to <span>VubaPay</span></h2>
+    <div class="cards-container">
+        <div class="card" onclick="openModal('client')">
+            <div class="card-icon"><i class="fas fa-user"></i></div>
+            <h3 id="clientTitle">I'm a Client</h3>
+            <p id="clientDesc">Pay for services quickly and safely. Scan QR codes and pay in seconds.</p>
+            <button class="card-btn" id="clientBtn">Sign In as Client →</button>
+        </div>
+        <div class="card" onclick="openModal('provider')">
+            <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+            <h3 id="providerTitle">Service Provider</h3>
+            <p id="providerDesc">Receive payments directly to your mobile money wallet. No cash, no worries.</p>
+            <button class="card-btn" id="providerBtn">Sign In as Provider →</button>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="how-it-works">
+    <h2 class="section-title" id="howTitle">How <span>It Works</span></h2>
+    <div class="steps">
+        <div class="step"><div class="step-number">1</div><h4 id="step1Title">Scan QR Code</h4><p id="step1Desc">Open camera and scan the QR code</p></div>
+        <div class="step"><div class="step-number">2</div><h4 id="step2Title">Enter Amount</h4><p id="step2Desc">Type the amount and confirm</p></div>
+        <div class="step"><div class="step-number">3</div><h4 id="step3Title">Pay Instantly</h4><p id="step3Desc">Money transferred instantly</p></div>
+        <div class="step"><div class="step-number">4</div><h4 id="step4Title">Done!</h4><p id="step4Desc">No errors, no delays</p></div>
+    </div>
+</section>
+
+<footer id="contact" class="footer">
+    <div class="footer-content">
+        <div class="footer-section"><h4>VubaPay</h4><p id="footerDesc">Smart Payment System<br>Making transactions safer</p><div class="social-icons"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
+        <div class="footer-section"><h4 id="quickLinksTitle">Quick Links</h4><p><a onclick="scrollToSection('home')" id="footerHome">Home</a></p><p><a onclick="scrollToSection('how-it-works')" id="footerHow">How It Works</a></p><p><a onclick="scrollToSection('login')" id="footerSignIn">Sign In</a></p></div>
+        <div class="footer-section"><h4 id="footerContactTitle">Contact</h4><p><i class="fas fa-phone"></i> +250 788 123 456</p><p><i class="fas fa-envelope"></i> hello@vubapay.rw</p><p><i class="fas fa-map-marker-alt"></i> Kigali, Rwanda</p></div>
+    </div>
+    <div class="footer-bottom"><p id="copyright">&copy; 2024 VubaPay by ChessX Technologies | Scan, Pay, Done - No Errors</p></div>
+</footer>
+
+<div id="signinModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal()">&times;</span><h2 id="modalTitle">Sign In</h2><div id="modalAlert" class="alert"></div><div id="modalForm"></div></div></div>
+
+<script>
+    // ============ GLOBAL LANGUAGE TRANSLATIONS ============
+    const translations = {
+        en: {
+            navHome: "Home", navHowItWorks: "How It Works", navSignIn: "Sign In", navContact: "Contact",
+            heroBadge: "Digital Payment Made Simple", heroTitle: "Scan <span>QR Code</span><br>Pay Instantly",
+            heroDesc: "No more typing errors, no more asking for payment details. Just scan, pay, and go.",
+            statUsers: "Active Users", statTxns: "Transactions", statError: "Error-Free", scanToPay: "Scan to Pay",
+            digitalTitle: "🚀 Digitalize Your Business Today!", digitalDesc: "Smart payment solution - No more typing errors - Accept payments via QR code",
+            tagShops: "Small Shops", tagSupermarkets: "Supermarkets", tagWeddings: "Wedding Support", tagProviders: "Service Providers",
+            welcomeTitle: "Welcome to <span>VubaPay</span>", clientTitle: "I'm a Client", clientDesc: "Pay for services quickly and safely. Scan QR codes and pay in seconds.",
+            clientBtn: "Sign In as Client →", providerTitle: "Service Provider", providerDesc: "Receive payments directly to your mobile money wallet. No cash, no worries.",
+            providerBtn: "Sign In as Provider →", howTitle: "How <span>It Works</span>", step1Title: "Scan QR Code", step1Desc: "Open camera and scan the QR code",
+            step2Title: "Enter Amount", step2Desc: "Type the amount and confirm", step3Title: "Pay Instantly", step3Desc: "Money transferred instantly",
+            step4Title: "Done!", step4Desc: "No errors, no delays", footerDesc: "Smart Payment System<br>Making transactions safer",
+            quickLinksTitle: "Quick Links", footerHome: "Home", footerHow: "How It Works", footerSignIn: "Sign In", footerContactTitle: "Contact",
+            copyright: "© 2024 VubaPay by ChessX Technologies | Scan, Pay, Done - No Errors", modalTitle: "Sign In"
+        },
+        rw: {
+            navHome: "Ahabanza", navHowItWorks: "Uko Ikora", navSignIn: "Injira", navContact: "Twandikire",
+            heroBadge: "Kwishyura Byoroheje", heroTitle: "Kanda <span>QR Code</span><br>Wishyure Vuba",
+            heroDesc: "Nta makosa yo kwandika, nta gusaba amakuru yishyura. Kanda gusa, wishyure, ujye.",
+            statUsers: "Abakoresha", statTxns: "Ibyishyuwe", statError: "Nta Makosa", scanToPay: "Kanda Wishyure",
+            digitalTitle: "🚀 Hindura Ubucuruzi Bwawe!", digitalDesc: "Icyishyura cyoroshe - Nta makosa - Yakira amafaranga ukoresheje QR code",
+            tagShops: "Maduka Matoya", tagSupermarkets: "Supermarketi", tagWeddings: "Ubukwe", tagProviders: "Abatanga Serivisi",
+            welcomeTitle: "Murakaza neza kuri <span>VubaPay</span>", clientTitle: "Ndi Umukiriya", clientDesc: "Wishyura serivisi vuba kandi neza. Kanda QR code wishyure mu byindi.",
+            clientBtn: "Injira nk'Umukiriya →", providerTitle: "Utanga Serivisi", providerDesc: "Wakira amafaranga mu konto yawe ya mobile money. Nta mafaranga y'ikaye, nta mbogamizi.",
+            providerBtn: "Injira nk'Utanga Serivisi →", howTitle: "Uko <span>Bikora</span>", step1Title: "Kanda QR Code", step1Desc: "Fungura kamera ukande QR code",
+            step2Title: "Shyiramo Amafaranga", step2Desc: "Andika amafaranga ubishaka", step3Title: "Wishyure Vuba", step3Desc: "Amafaranga arahita yinjira",
+            step4Title: "Byakozwe!", step4Desc: "Nta makosa, nta gutinda", footerDesc: "Icyishyura cyoroshe<br>Kuringaniza ibikorwa",
+            quickLinksTitle: "Ihita", footerHome: "Ahabanza", footerHow: "Uko Bikora", footerSignIn: "Injira", footerContactTitle: "Twandikire",
+            copyright: "© 2024 VubaPay na ChessX Technologies | Kanda, Wishyure, Byakozwe - Nta Makosa", modalTitle: "Injira"
+        },
+        sw: {
+            navHome: "Nyumbani", navHowItWorks: "Inavyofanya Kazi", navSignIn: "Ingia", navContact: "Wasiliana Nasi",
+            heroBadge: "Malipo Rahisi", heroTitle: "Kagua <span>QR Code</span><br>Lipa Papo Hapo",
+            heroDesc: "Hakuna makosa ya kuandika, hakuna kuuliza maelezo ya malipo. Kagua tu, lipa, na kwenda.",
+            statUsers: "Watumiaji", statTxns: "Malipo", statError: "Hakuna Makosa", scanToPay: "Kagua Ulipe",
+            digitalTitle: "🚀 Fanya Biashara Yako Kidijitali!", digitalDesc: "Suluhisho la malipo - Hakuna makosa - Kubali malipo kwa QR code",
+            tagShops: "Maduka Madogo", tagSupermarkets: "Supermarketi", tagWeddings: "Misaada ya Harusi", tagProviders: "Watoa Huduma",
+            welcomeTitle: "Karibu kwenye <span>VubaPay</span>", clientTitle: "Mimi ni Mteja", clientDesc: "Lipa huduma haraka na salama. Kagua QR code na lipe kwa sekunde.",
+            clientBtn: "Ingia kama Mteja →", providerTitle: "Mtoa Huduma", providerDesc: "Pokea malipo moja kwa moja kwenye pochi yako. Hakuna pesa taslimu, hakuna wasiwasi.",
+            providerBtn: "Ingia kama Mtoa Huduma →", howTitle: "Inavyofanya <span>Kazi</span>", step1Title: "Kagua QR Code", step1Desc: "Fungua kamera ukague QR code",
+            step2Title: "Weka Kiasi", step2Desc: "Andika kiasi ulichokubaliana", step3Title: "Lipa Mara Moja", step3Desc: "Pesa huhamishwa papo hapo",
+            step4Title: "Imekwisha!", step4Desc: "Hakuna makosa, hakuna ucheleweshaji", footerDesc: "Mfumo wa Malipo<br>Kufanya miamala salama",
+            quickLinksTitle: "Viungo", footerHome: "Nyumbani", footerHow: "Inavyofanya Kazi", footerSignIn: "Ingia", footerContactTitle: "Wasiliana Nasi",
+            copyright: "© 2024 VubaPay na ChessX Technologies | Kagua, Lipa, Imekwisha - Hakuna Makosa", modalTitle: "Ingia"
+        },
+        fr: {
+            navHome: "Accueil", navHowItWorks: "Comment ça Marche", navSignIn: "Connexion", navContact: "Contact",
+            heroBadge: "Paiement Simplifié", heroTitle: "Scannez le <span>QR Code</span><br>Payez Instantanément",
+            heroDesc: "Plus d'erreurs de saisie, plus de demande d'informations de paiement. Scannez, payez, et partez.",
+            statUsers: "Utilisateurs", statTxns: "Transactions", statError: "Sans Erreur", scanToPay: "Scannez pour Payer",
+            digitalTitle: "🚀 Digitalisez Votre Entreprise!", digitalDesc: "Solution de paiement intelligent - Plus d'erreurs - Acceptez les paiements par QR code",
+            tagShops: "Petits Magasins", tagSupermarkets: "Supermarchés", tagWeddings: "Soutien Mariage", tagProviders: "Prestataires",
+            welcomeTitle: "Bienvenue sur <span>VubaPay</span>", clientTitle: "Je suis Client", clientDesc: "Payez les services rapidement et en toute sécurité. Scannez le QR code et payez en secondes.",
+            clientBtn: "Se connecter en tant que Client →", providerTitle: "Prestataire", providerDesc: "Recevez les paiements directement sur votre porte-monnaie mobile. Pas d'espèces, pas de soucis.",
+            providerBtn: "Se connecter en tant que Prestataire →", howTitle: "Comment <span>ça Marche</span>", step1Title: "Scannez QR Code", step1Desc: "Ouvrez l'appareil photo et scannez le QR code",
+            step2Title: "Entrez le Montant", step2Desc: "Saisissez le montant et confirmez", step3Title: "Payez Instantanément", step3Desc: "L'argent est transféré instantanément",
+            step4Title: "Terminé!", step4Desc: "Pas d'erreurs, pas de retards", footerDesc: "Système de Paiement<br>Transactions sécurisées",
+            quickLinksTitle: "Liens Rapides", footerHome: "Accueil", footerHow: "Comment ça Marche", footerSignIn: "Connexion", footerContactTitle: "Contact",
+            copyright: "© 2024 VubaPay par ChessX Technologies | Scannez, Payez, Terminé - Pas d'Erreurs", modalTitle: "Connexion"
+        }
+    };
+
+    let currentLang = 'en';
+    let currentUserType = 'provider';
+    let isLoginMode = true;
+
+    // ============ LANGUAGE FUNCTIONS (GLOBAL) ============
+    function changeLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+        const langNames = { en: 'English', rw: 'Kinyarwanda', sw: 'Kiswahili', fr: 'Français' };
+        
+        document.getElementById('currentLang').innerText = langNames[lang];
+        document.getElementById('navHome').innerText = t.navHome;
+        document.getElementById('navHowItWorks').innerText = t.navHowItWorks;
+        document.getElementById('navSignIn').innerText = t.navSignIn;
+        document.getElementById('navContact').innerText = t.navContact;
+        document.getElementById('heroBadge').innerHTML = `<i class="fas fa-bolt"></i> ${t.heroBadge}`;
+        document.getElementById('heroTitle').innerHTML = t.heroTitle;
+        document.getElementById('heroDesc').innerText = t.heroDesc;
+        document.getElementById('statUsers').innerText = t.statUsers;
+        document.getElementById('statTxns').innerText = t.statTxns;
+        document.getElementById('statError').innerText = t.statError;
+        document.getElementById('scanToPay').innerText = t.scanToPay;
+        document.getElementById('digitalTitle').innerText = t.digitalTitle;
+        document.getElementById('digitalDesc').innerText = t.digitalDesc;
+        document.getElementById('tagShops').innerHTML = `<i class="fas fa-store"></i> ${t.tagShops}`;
+        document.getElementById('tagSupermarkets').innerHTML = `<i class="fas fa-shopping-cart"></i> ${t.tagSupermarkets}`;
+        document.getElementById('tagWeddings').innerHTML = `<i class="fas fa-heart"></i> ${t.tagWeddings}`;
+        document.getElementById('tagProviders').innerHTML = `<i class="fas fa-briefcase"></i> ${t.tagProviders}`;
+        document.getElementById('welcomeTitle').innerHTML = t.welcomeTitle;
+        document.getElementById('clientTitle').innerText = t.clientTitle;
+        document.getElementById('clientDesc').innerText = t.clientDesc;
+        document.getElementById('clientBtn').innerText = t.clientBtn;
+        document.getElementById('providerTitle').innerText = t.providerTitle;
+        document.getElementById('providerDesc').innerText = t.providerDesc;
+        document.getElementById('providerBtn').innerText = t.providerBtn;
+        document.getElementById('howTitle').innerHTML = t.howTitle;
+        document.getElementById('step1Title').innerText = t.step1Title;
+        document.getElementById('step1Desc').innerText = t.step1Desc;
+        document.getElementById('step2Title').innerText = t.step2Title;
+        document.getElementById('step2Desc').innerText = t.step2Desc;
+        document.getElementById('step3Title').innerText = t.step3Title;
+        document.getElementById('step3Desc').innerText = t.step3Desc;
+        document.getElementById('step4Title').innerText = t.step4Title;
+        document.getElementById('step4Desc').innerText = t.step4Desc;
+        document.getElementById('footerDesc').innerHTML = t.footerDesc;
+        document.getElementById('quickLinksTitle').innerText = t.quickLinksTitle;
+        document.getElementById('footerHome').innerText = t.footerHome;
+        document.getElementById('footerHow').innerText = t.footerHow;
+        document.getElementById('footerSignIn').innerText = t.footerSignIn;
+        document.getElementById('footerContactTitle').innerText = t.footerContactTitle;
+        document.getElementById('copyright').innerText = t.copyright;
+        document.getElementById('modalTitle').innerText = t.modalTitle;
+        
+        // Save to localStorage for persistence across all pages
+        localStorage.setItem('vubapay_language', lang);
+        
+        // Also update any open modal if visible
+        if (document.getElementById('signinModal').style.display === 'flex') {
+            if (isLoginMode) showLoginForm();
+            else showRegisterForm();
+        }
+    }
+
+    function loadLanguagePreference() {
+        const savedLang = localStorage.getItem('vubapay_language');
+        if (savedLang && translations[savedLang]) {
+            changeLanguage(savedLang);
+        } else {
+            changeLanguage('en');
+        }
+    }
+
+    function scrollToSection(sectionId) {
+        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openModal(type) {
+        currentUserType = type;
+        isLoginMode = true;
+        const modal = document.getElementById('signinModal');
+        const title = document.getElementById('modalTitle');
+        const t = translations[currentLang];
+        title.innerHTML = type === 'client' ? `<i class="fas fa-user"></i> ${t.clientTitle} ${t.modalTitle}` : `<i class="fas fa-briefcase"></i> ${t.providerTitle} ${t.modalTitle}`;
+        showLoginForm();
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('signinModal').style.display = 'none';
+        document.getElementById('modalAlert').style.display = 'none';
+    }
+
+    function showLoginForm() {
+        const t = translations[currentLang];
+        const formHtml = `
+            <form onsubmit="return handleLogin(event)">
+                <input type="email" id="loginEmail" class="modal-input" placeholder="Email Address" required>
+                <input type="password" id="loginPassword" class="modal-input" placeholder="Password" required>
+                <button type="submit" class="modal-btn">${t.modalTitle}</button>
+            </form>
+            <div class="modal-footer">
+                Don't have an account? <a onclick="showRegisterForm()">Create Account</a>
+            </div>
+        `;
+        document.getElementById('modalForm').innerHTML = formHtml;
+    }
+
+    function showRegisterForm() {
+        const t = translations[currentLang];
+        isLoginMode = false;
+        
+        if (currentUserType === 'provider') {
+            const formHtml = `
+                <form onsubmit="return handleRegister(event)">
+                    <input type="text" id="regNames" class="modal-input" placeholder="Full Name" required>
+                    <input type="email" id="regEmail" class="modal-input" placeholder="Email Address" required>
+                    <input type="tel" id="regPhone" class="modal-input" placeholder="Phone Number" required>
+                    <input type="text" id="regPlate" class="modal-input" placeholder="Business/Service ID" required>
+                    <input type="password" id="regPassword" class="modal-input" placeholder="Password" required>
+                    <input type="password" id="regConfirmPassword" class="modal-input" placeholder="Confirm Password" required>
+                    <button type="submit" class="modal-btn">Create Provider Account</button>
+                </form>
+                <div class="modal-footer">
+                    Already have an account? <a onclick="showLoginForm()">Sign In</a>
+                </div>
+            `;
+            document.getElementById('modalForm').innerHTML = formHtml;
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-briefcase"></i> Become a VubaPay Provider`;
+        } else {
+            const formHtml = `
+                <form onsubmit="return handleRegister(event)">
+                    <input type="text" id="regNames" class="modal-input" placeholder="Full Name" required>
+                    <input type="email" id="regEmail" class="modal-input" placeholder="Email Address" required>
+                    <input type="tel" id="regPhone" class="modal-input" placeholder="Phone Number" required>
+                    <input type="password" id="regPassword" class="modal-input" placeholder="Password" required>
+                    <input type="password" id="regConfirmPassword" class="modal-input" placeholder="Confirm Password" required>
+                    <button type="submit" class="modal-btn">Create Client Account</button>
+                </form>
+                <div class="modal-footer">
+                    Already have an account? <a onclick="showLoginForm()">Sign In</a>
+                </div>
+            `;
+            document.getElementById('modalForm').innerHTML = formHtml;
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-user"></i> Join VubaPay as Client`;
+        }
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('modalAlert');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+        alertDiv.style.display = 'block';
+        setTimeout(() => { alertDiv.style.display = 'none'; }, 3000);
+    }
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const submitBtn = event.target.querySelector('.modal-btn');
+        submitBtn.textContent = 'Signing in...';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, user_type: currentUserType })
+            });
+            const data = await response.json();
+            if (data.success) {
+                showAlert('Login successful! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = data.redirect; }, 1000);
+            } else {
+                showAlert(data.message || 'Login failed', 'error');
+                submitBtn.textContent = 'Sign In';
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            showAlert('Connection error. Make sure the server is running.', 'error');
+            submitBtn.textContent = 'Sign In';
+            submitBtn.disabled = false;
+        }
+    }
+
+    async function handleRegister(event) {
+        event.preventDefault();
+        const names = document.getElementById('regNames').value;
+        const email = document.getElementById('regEmail').value;
+        const phone = document.getElementById('regPhone').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        
+        if (password !== confirmPassword) { showAlert('Passwords do not match!', 'error'); return; }
+        if (password.length < 6) { showAlert('Password must be at least 6 characters', 'error'); return; }
+        
+        const submitBtn = event.target.querySelector('.modal-btn');
+        submitBtn.textContent = 'Creating account...';
+        submitBtn.disabled = true;
+        
+        const requestData = { user_type: currentUserType, names, email, phone, password };
+        if (currentUserType === 'provider') {
+            const plateNumber = document.getElementById('regPlate').value;
+            if (!plateNumber) {
+                showAlert('Please enter your Business/Service ID', 'error');
+                submitBtn.textContent = 'Create Account';
+                submitBtn.disabled = false;
+                return;
+            }
+            requestData.plate_number = plateNumber;
+        }
+        
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                showAlert(data.message + '! Please sign in.', 'success');
+                setTimeout(() => { showLoginForm(); }, 1500);
+            } else {
+                showAlert(data.message || 'Registration failed', 'error');
+                submitBtn.textContent = 'Create Account';
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            showAlert('Connection error. Make sure the server is running.', 'error');
+            submitBtn.textContent = 'Create Account';
+            submitBtn.disabled = false;
+        }
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('signinModal');
+        if (event.target === modal) closeModal();
+    }
+
+    // Initialize language on page load
+    loadLanguagePreference();
+</script>
+</body>
+</html>
